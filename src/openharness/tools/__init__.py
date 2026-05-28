@@ -5,6 +5,7 @@ from openharness.tools.agent_tool import AgentTool
 from openharness.tools.bash_tool import BashTool
 from openharness.tools.base import BaseTool, ToolExecutionContext, ToolRegistry, ToolResult
 from openharness.tools.brief_tool import BriefTool
+from openharness.tools.cli_anything_tool import CliAnythingTool
 from openharness.tools.config_tool import ConfigTool
 from openharness.tools.cron_create_tool import CronCreateTool
 from openharness.tools.cron_delete_tool import CronDeleteTool
@@ -29,6 +30,7 @@ from openharness.tools.notebook_edit_tool import NotebookEditTool
 from openharness.tools.read_mcp_resource_tool import ReadMcpResourceTool
 from openharness.tools.remote_trigger_tool import RemoteTriggerTool
 from openharness.tools.send_message_tool import SendMessageTool
+from openharness.tools.skill_executor_tool import SkillExecutorTool
 from openharness.tools.skill_tool import SkillTool
 from openharness.tools.sleep_tool import SleepTool
 from openharness.tools.task_create_tool import TaskCreateTool
@@ -67,6 +69,8 @@ def create_default_tool_registry(mcp_manager=None) -> ToolRegistry:
         WebSearchTool(),
         ConfigTool(),
         BriefTool(),
+        CliAnythingTool(),
+        SkillExecutorTool(),
         SleepTool(),
         EnterWorktreeTool(),
         ExitWorktreeTool(),
