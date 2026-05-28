@@ -357,3 +357,70 @@ workflow = matcher.suggest_workflow("帮我用 Blender 做 3D 模型")
 - ✅ 工具像"安装 App"一样简单（放 SKILL.md 就行）
 - ✅ 热更新：添加新工具无需重启
 - ✅ 自动发现：LLM 可以读取 SKILL.md 了解工具能力
+
+### 实现的问题和解决方案
+
+#### 问题 1：SKILL 信息没有传递给 LLM
+**问题描述**：
+- `SkillMatcher.find_skills()` 只返回匹配的 SKILL
+- LLM 看不到这些 SKILL 的命令定义
+- LLM 不知道有哪些命令可用
+
+**解决方案**：
+创建 `SkillContextInjector` 类，将 SKILL 信息注入到 LLM 上下文：
+```python
+# src/openharness/task_workflow/skill_context_injector.py
+class SkillContextInjector:
+    def build_skill_context_message(self, user_intent, limit=5):
+        # 构建包含 SKILL 命令的系统消息
+        # LLM 可以看到有哪些工具可用
+```
+
+#### 问题 2：WorkflowExecutor 没有集成 SKILL 工具
+**问题描述**：
+- SKILL 发现和执行是分离的
+- LLM 无法调用 skill_executor 工具
+
+**解决方案**：
+修改 `WorkflowExecutor.execute()` 方法：
+1. 在 system prompt 中注入 SKILL 上下文
+2. 将 skill_executor 工具添加到工具注册表
+
+```python
+# src/openharness/task_workflow/executor.py
+
+# SKILL context injection
+injector = get_skill_context_injector()
+skill_msg = injector.build_skill_context_message(user_input, limit=5)
+phase_system_prompt += "\n\n" + skill_msg["content"]
+
+# Add skill_executor tool
+schema = injector.get_skill_command_schema("cli-anything-gimp")
+scoped_registry._tools.append(ToolDefinition.from_dict(schema))
+```
+
+#### 完整的 SKILL 执行流程
+
+```
+1. User input: "帮我用 GIMP 创建一个 800x600 的图片"
+    │
+    ├─ SmallModel classify: "tool"
+    │
+    ├─ SkillMatcher match:
+    │     → cli-anything-gimp (score: 3.0)
+    │
+    ├─ WorkflowExecutor:
+    │     ├─ 注入 SKILL 上下文到 system prompt
+    │     ├─ 添加 skill_executor 工具
+    │     └─ 调用 LLM
+    │
+    ├─ LLM 生成调用:
+    │     skill_executor(
+    │       skill_name="cli-anything-gimp",
+    │       command="new",
+    │       args="--width 800 --height 600"
+    │     )
+    │
+    └─ SkillExecutorTool 执行:
+          $ cli-anything-gimp new --width 800 --height 600
+```
