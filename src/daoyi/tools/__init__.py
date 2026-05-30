@@ -46,6 +46,7 @@ from daoyi.tools.tool_search_tool import ToolSearchTool
 from daoyi.tools.web_fetch_tool import WebFetchTool
 from daoyi.tools.web_search_tool import WebSearchTool
 from daoyi.tools.open_browser_tool import OpenBrowserTool
+from daoyi.tools.stock_price_tool import StockPriceTool
 
 
 def create_default_tool_registry(mcp_manager=None) -> ToolRegistry:
@@ -94,6 +95,7 @@ def create_default_tool_registry(mcp_manager=None) -> ToolRegistry:
         SendMessageTool(),
         TeamCreateTool(),
         TeamDeleteTool(),
+        StockPriceTool(),
     ):
         registry.register(tool)
     if mcp_manager is not None:

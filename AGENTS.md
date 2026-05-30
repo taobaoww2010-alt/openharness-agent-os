@@ -31,6 +31,7 @@
 - `skill_executor_tool` — 动态执行 SKILL.md 命令
 - `read_skill_tool` — LLM 按需获取 Skill 完整命令列表
 - **cua-driver 浏览器自动化** — real Chrome 单例 (`ChromeSession`) + 智能页面加载等待 + `open -a` 导航回退
+- **股票行情查询** — `stock_price` 工具，支持沪深 A 股及时行情（新浪 API）
 - **Baidu 搜索引擎** — 替换 Google（被墙），Baidu JS 提取 + 文本回退解析
 - **cua-daemon 自动启动** — UI 启动时检测并拉起 `CuaDriver serve`
 - 错误处理增强 (`asyncio.timeout` + 3×重试 + ErrorEvent)
@@ -114,6 +115,7 @@ User → pre_classify (continuation? → inherit last intent)
 - `tools/skill_executor_tool.py` — dynamic SKILL execution
 - `tools/read_skill_tool.py` — lazy SKILL loading
 - `tools/_chrome_session.py` — Shared Chrome session singleton (cua-driver, `open -a` fallback)
+- `tools/stock_price_tool.py` — 实时 A 股行情查询（新浪 API）
 - `tools/web_search_tool.py` — Baidu 搜索 + wttr.in 天气回退
 - `tools/web_fetch_tool.py` — 通过共享 Chrome session 抓取页面
 - `tools/cli_anything_tool.py` — legacy hardcoded kept for tests
