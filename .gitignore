@@ -36,6 +36,9 @@ react_tui_smoke.txt
 Thumbs.db
 uv.lock
 
+# Test artifacts
+test_baidu.py
+
 # Build artifacts (alternative dirs)
 build2/
 build3/
