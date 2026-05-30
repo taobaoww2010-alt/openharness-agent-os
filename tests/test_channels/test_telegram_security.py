@@ -6,10 +6,10 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from openharness.channels.bus.queue import MessageBus
-from openharness.channels.impl.manager import ChannelManager
-from openharness.channels.impl.telegram import TelegramChannel, silence_telegram_token_url_loggers
-from openharness.config.schema import Config, TelegramConfig
+from daoyi.channels.bus.queue import MessageBus
+from daoyi.channels.impl.manager import ChannelManager
+from daoyi.channels.impl.telegram import TelegramChannel, silence_telegram_token_url_loggers
+from daoyi.config.schema import Config, TelegramConfig
 
 
 def test_silence_telegram_token_url_loggers_raises_dependency_log_levels():

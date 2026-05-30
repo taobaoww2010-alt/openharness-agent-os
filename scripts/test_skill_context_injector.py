@@ -6,7 +6,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from openharness.task_workflow.skill_context_injector import get_skill_context_injector
+from daoyi.task_workflow.skill_context_injector import get_skill_context_injector
 
 
 def test_build_context_message():

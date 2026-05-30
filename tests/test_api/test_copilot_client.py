@@ -7,19 +7,19 @@ from typing import AsyncIterator
 
 import pytest
 
-from openharness.api.client import (
+from daoyi.api.client import (
     ApiMessageCompleteEvent,
     ApiMessageRequest,
     ApiStreamEvent,
     ApiTextDeltaEvent,
 )
-from openharness.api.copilot_auth import (
+from daoyi.api.copilot_auth import (
     save_copilot_auth,
 )
-from openharness.api.copilot_client import CopilotClient
-from openharness.api.errors import AuthenticationFailure
-from openharness.api.usage import UsageSnapshot
-from openharness.engine.messages import ConversationMessage, TextBlock
+from daoyi.api.copilot_client import CopilotClient
+from daoyi.api.errors import AuthenticationFailure
+from daoyi.api.usage import UsageSnapshot
+from daoyi.engine.messages import ConversationMessage, TextBlock
 
 
 # ---------------------------------------------------------------------------

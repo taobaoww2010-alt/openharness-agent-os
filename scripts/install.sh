@@ -184,8 +184,8 @@ fi
 step "Installing OpenHarness"
 
 REPO_URL="https://github.com/HKUDS/OpenHarness.git"
-INSTALL_DIR="$HOME/.openharness-src"
-VENV_DIR="$HOME/.openharness-venv"
+INSTALL_DIR="$HOME/.daoyi-src"
+VENV_DIR="$HOME/.daoyi-venv"
 BIN_DIR="$HOME/.local/bin"
 
 # ---------------------------------------------------------------------------
@@ -231,8 +231,8 @@ if [ "$FROM_SOURCE" = true ]; then
     info "Installing in editable mode (pip install -e .)..."
     $PIP_CMD install -e "$INSTALL_DIR" --quiet
 else
-    info "Mode: pip install openharness-ai"
-    $PIP_CMD install openharness-ai --quiet --upgrade
+    info "Mode: pip install daoyi-ai"
+    $PIP_CMD install daoyi-ai --quiet --upgrade
 fi
 
 success "OpenHarness package installed"
@@ -271,11 +271,11 @@ fi
 # ---------------------------------------------------------------------------
 step "Setting up OpenHarness config directory"
 
-mkdir -p "$HOME/.openharness"
-mkdir -p "$HOME/.openharness/skills"
-mkdir -p "$HOME/.openharness/plugins"
+mkdir -p "$HOME/.daoyi"
+mkdir -p "$HOME/.daoyi/skills"
+mkdir -p "$HOME/.daoyi/plugins"
 
-success "Config directory ready: ~/.openharness/"
+success "Config directory ready: ~/.daoyi/"
 
 # ---------------------------------------------------------------------------
 # Step 8: Register global commands
@@ -285,7 +285,7 @@ step "Registering global commands"
 mkdir -p "$BIN_DIR"
 ln -snf "$VENV_DIR/bin/oh" "$BIN_DIR/oh"
 ln -snf "$VENV_DIR/bin/ohmo" "$BIN_DIR/ohmo"
-ln -snf "$VENV_DIR/bin/openharness" "$BIN_DIR/openharness"
+ln -snf "$VENV_DIR/bin/daoyi" "$BIN_DIR/daoyi"
 success "Linked oh/ohmo into ${BIN_DIR}"
 
 # ---------------------------------------------------------------------------
@@ -300,15 +300,15 @@ if [ -x "$BIN_DIR/oh" ] && [ -x "$BIN_DIR/ohmo" ]; then
     echo ""
     echo -e "  ${BOLD}oh${RESET} is ready: ${GREEN}${OH_VERSION}${RESET}"
     echo -e "  ${BOLD}ohmo${RESET} is ready: ${GREEN}${OHMO_VERSION}${RESET}"
-elif "$PYTHON_CMD" -m openharness --version &>/dev/null 2>&1; then
-    OH_VERSION=$("$PYTHON_CMD" -m openharness --version 2>&1)
-    warn "'oh'/'ohmo' command links are not executable yet. Run via: python -m openharness or python -m ohmo"
+elif "$PYTHON_CMD" -m daoyi --version &>/dev/null 2>&1; then
+    OH_VERSION=$("$PYTHON_CMD" -m daoyi --version 2>&1)
+    warn "'oh'/'ohmo' command links are not executable yet. Run via: python -m daoyi or python -m ohmo"
     echo "  Version: ${OH_VERSION}"
     echo "  To add them to PATH, ensure ${BIN_DIR} is in PATH:"
     echo "    export PATH=\"${BIN_DIR}:\$PATH\""
 else
     warn "Could not verify 'oh'/'ohmo' commands. The package may need a PATH update."
-    echo "  Try: $PYTHON_CMD -m openharness --version"
+    echo "  Try: $PYTHON_CMD -m daoyi --version"
     echo "  Or add ${BIN_DIR} to PATH and restart your shell."
 fi
 

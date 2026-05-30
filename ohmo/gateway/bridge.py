@@ -7,9 +7,9 @@ import logging
 from collections.abc import Awaitable, Callable
 from pathlib import Path
 
-from openharness.channels.bus.events import InboundMessage
-from openharness.channels.bus.events import OutboundMessage
-from openharness.channels.bus.queue import MessageBus
+from daoyi.channels.bus.events import InboundMessage
+from daoyi.channels.bus.events import OutboundMessage
+from daoyi.channels.bus.queue import MessageBus
 
 from ohmo.group_registry import load_managed_group_record
 from ohmo.gateway.router import session_key_for_message

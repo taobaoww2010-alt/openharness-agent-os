@@ -6,7 +6,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from openharness.task_workflow.skill_discovery import get_skill_matcher
+from daoyi.task_workflow.skill_discovery import get_skill_matcher
 
 
 def test_find_skills():

@@ -9,20 +9,20 @@ from types import SimpleNamespace
 
 import pytest
 
-from openharness.api.client import ApiMessageCompleteEvent
-from openharness.api.usage import UsageSnapshot
-from openharness.engine.stream_events import CompactProgressEvent
-from openharness.engine.messages import ConversationMessage, ImageBlock, TextBlock
-from openharness.config.settings import Settings, save_settings
-from openharness.ui.backend_host import (
+from daoyi.api.client import ApiMessageCompleteEvent
+from daoyi.api.usage import UsageSnapshot
+from daoyi.engine.stream_events import CompactProgressEvent
+from daoyi.engine.messages import ConversationMessage, ImageBlock, TextBlock
+from daoyi.config.settings import Settings, save_settings
+from daoyi.ui.backend_host import (
     BackendHostConfig,
     ReactBackendHost,
     _build_user_message_with_images,
     _format_transcript_line,
     run_backend_host,
 )
-from openharness.ui.protocol import BackendEvent, FrontendImageAttachment, FrontendRequest
-from openharness.ui.runtime import build_runtime, close_runtime, start_runtime
+from daoyi.ui.protocol import BackendEvent, FrontendImageAttachment, FrontendRequest
+from daoyi.ui.runtime import build_runtime, close_runtime, start_runtime
 
 
 class StaticApiClient:
@@ -149,7 +149,7 @@ async def test_run_backend_host_accepts_permission_mode(monkeypatch):
         captured["permission_mode"] = self._config.permission_mode
         return 0
 
-    monkeypatch.setattr("openharness.ui.backend_host.ReactBackendHost.run", _fake_run)
+    monkeypatch.setattr("daoyi.ui.backend_host.ReactBackendHost.run", _fake_run)
 
     result = await run_backend_host(
         api_client=StaticApiClient("unused"),
@@ -181,7 +181,7 @@ async def test_read_requests_resolves_permission_response_without_queueing(monke
     class _FakeStdin:
         buffer = _FakeBuffer()
 
-    monkeypatch.setattr("openharness.ui.backend_host.sys.stdin", _FakeStdin())
+    monkeypatch.setattr("daoyi.ui.backend_host.sys.stdin", _FakeStdin())
 
     await host._read_requests()
 
@@ -213,7 +213,7 @@ async def test_read_requests_resolves_edit_approval_response_without_queueing(mo
     class _FakeStdin:
         buffer = _FakeBuffer()
 
-    monkeypatch.setattr("openharness.ui.backend_host.sys.stdin", _FakeStdin())
+    monkeypatch.setattr("daoyi.ui.backend_host.sys.stdin", _FakeStdin())
 
     await host._read_requests()
 
@@ -247,7 +247,7 @@ async def test_read_requests_interrupt_cancels_active_request(monkeypatch):
     class _FakeStdin:
         buffer = _FakeBuffer()
 
-    monkeypatch.setattr("openharness.ui.backend_host.sys.stdin", _FakeStdin())
+    monkeypatch.setattr("daoyi.ui.backend_host.sys.stdin", _FakeStdin())
 
     await host._read_requests()
 
@@ -333,6 +333,7 @@ async def test_backend_host_processes_model_turn(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("OPENHARNESS_CONFIG_DIR", str(tmp_path / "config"))
     monkeypatch.setenv("OPENHARNESS_DATA_DIR", str(tmp_path / "data"))
+    monkeypatch.setattr("daoyi.llm.small_model.SmallModelClient.is_available", lambda: False)
 
     host = ReactBackendHost(BackendHostConfig(api_client=StaticApiClient("hello from react backend")))
     host._bundle = await build_runtime(api_client=StaticApiClient("hello from react backend"))
@@ -367,6 +368,9 @@ async def test_backend_host_processes_image_turn(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("OPENHARNESS_CONFIG_DIR", str(tmp_path / "config"))
     monkeypatch.setenv("OPENHARNESS_DATA_DIR", str(tmp_path / "data"))
+    monkeypatch.setenv("DAOYI_HOME", str(tmp_path))
+    monkeypatch.setattr("daoyi.llm.small_model.SmallModelClient.is_available", lambda: False)
+    monkeypatch.setattr("daoyi.llm.small_model.SmallModelClient.get_instance", lambda: None)
 
     client = CapturingApiClient("image received")
     host = ReactBackendHost(BackendHostConfig(api_client=client))
@@ -441,7 +445,7 @@ async def test_backend_host_emits_compact_progress_event(tmp_path, monkeypatch):
         )
         return True
 
-    monkeypatch.setattr("openharness.ui.backend_host.handle_line", _fake_handle_line)
+    monkeypatch.setattr("daoyi.ui.backend_host.handle_line", _fake_handle_line)
     host._emit = _emit  # type: ignore[method-assign]
     await start_runtime(host._bundle)
     try:
@@ -464,6 +468,9 @@ async def test_backend_host_surfaces_query_errors(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("OPENHARNESS_CONFIG_DIR", str(tmp_path / "config"))
     monkeypatch.setenv("OPENHARNESS_DATA_DIR", str(tmp_path / "data"))
+    monkeypatch.setenv("DAOYI_HOME", str(tmp_path))
+    monkeypatch.setattr("daoyi.llm.small_model.SmallModelClient.is_available", lambda: False)
+    monkeypatch.setattr("daoyi.llm.small_model.SmallModelClient.get_instance", lambda: None)
 
     host = ReactBackendHost(BackendHostConfig(api_client=FailingApiClient("rate limit")))
     host._bundle = await build_runtime(api_client=FailingApiClient("rate limit"))
@@ -496,7 +503,7 @@ async def test_backend_host_command_does_not_reset_cli_overrides(tmp_path, monke
 
     When the session is launched with CLI overrides (e.g. --provider openai -m 5.4),
     issuing a command like /fast triggers a UI state refresh. That refresh must
-    preserve the effective session settings, not reload ~/.openharness/settings.json
+    preserve the effective session settings, not reload ~/.daoyi/settings.json
     verbatim.
     """
     monkeypatch.chdir(tmp_path)
@@ -579,7 +586,7 @@ async def test_build_runtime_leaves_interactive_sessions_unbounded_by_default(tm
 async def test_backend_host_emits_utf8_protocol_bytes(monkeypatch):
     host = ReactBackendHost(BackendHostConfig())
     fake_stdout = FakeBinaryStdout()
-    monkeypatch.setattr("openharness.ui.backend_host.sys.stdout", fake_stdout)
+    monkeypatch.setattr("daoyi.ui.backend_host.sys.stdout", fake_stdout)
 
     await host._emit(BackendEvent(type="assistant_delta", message="你好😊"))
 

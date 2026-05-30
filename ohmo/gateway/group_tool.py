@@ -8,7 +8,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field
 
-from openharness.tools.base import BaseTool, ToolExecutionContext, ToolResult
+from daoyi.tools.base import BaseTool, ToolExecutionContext, ToolResult
 
 from ohmo.group_registry import normalize_group_name, save_managed_group_record
 

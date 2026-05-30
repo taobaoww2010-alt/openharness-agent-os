@@ -8,43 +8,43 @@ from pathlib import Path
 
 import pytest
 
-from openharness.api.client import ApiMessageCompleteEvent
-from openharness.api.usage import UsageSnapshot
-from openharness.commands.registry import CommandContext, create_default_command_registry
-from openharness.config.settings import Settings
-from openharness.engine.messages import ConversationMessage, ToolUseBlock
-from openharness.engine.query_engine import QueryEngine
-from openharness.memory import add_memory_entry, get_project_memory_dir
-from openharness.memory.agent import (
+from daoyi.api.client import ApiMessageCompleteEvent
+from daoyi.api.usage import UsageSnapshot
+from daoyi.commands.registry import CommandContext, create_default_command_registry
+from daoyi.config.settings import Settings
+from daoyi.engine.messages import ConversationMessage, ToolUseBlock
+from daoyi.engine.query_engine import QueryEngine
+from daoyi.memory import add_memory_entry, get_project_memory_dir
+from daoyi.memory.agent import (
     ensure_agent_memory_vault,
     get_agent_memory_entrypoint,
     initialize_agent_memory_from_snapshot,
 )
-from openharness.memory.relevance import format_relevant_memories, select_relevant_memories
-from openharness.memory.schema import (
+from daoyi.memory.relevance import format_relevant_memories, select_relevant_memories
+from daoyi.memory.schema import (
     memory_freshness_text,
     parse_memory_scope,
     parse_memory_type,
     truncate_entrypoint_content,
 )
-from openharness.memory.team import (
+from daoyi.memory.team import (
     check_team_memory_secrets,
     ensure_team_memory_vault,
     validate_team_memory_write_path,
 )
-from openharness.permissions import PermissionChecker
-from openharness.services.memory_extract import (
+from daoyi.permissions import PermissionChecker
+from daoyi.services.memory_extract import (
     extract_memories_from_turn,
     has_memory_writes_since,
     parse_extraction_records,
     validate_extraction_tool_request,
 )
-from openharness.services.session_memory import (
+from daoyi.services.session_memory import (
     get_session_memory_content,
     get_session_memory_path,
     update_session_memory_file,
 )
-from openharness.tools import create_default_tool_registry
+from daoyi.tools import create_default_tool_registry
 
 
 class _FakeApiClient:
@@ -184,7 +184,7 @@ def test_agent_memory_snapshot_initializes(tmp_path: Path, monkeypatch: pytest.M
     monkeypatch.setenv("OPENHARNESS_DATA_DIR", str(tmp_path / "data"))
     project = tmp_path / "repo"
     project.mkdir()
-    snapshot = project / ".openharness" / "agent-memory-snapshots" / "reviewer"
+    snapshot = project / ".daoyi" / "agent-memory-snapshots" / "reviewer"
     snapshot.mkdir(parents=True)
     (snapshot / "MEMORY.md").write_text("# Snapshot\n", encoding="utf-8")
 

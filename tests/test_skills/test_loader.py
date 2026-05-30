@@ -5,11 +5,11 @@ from __future__ import annotations
 import textwrap
 from pathlib import Path
 
-from openharness.config.settings import Settings
-from openharness.skills import get_user_skills_dir, load_skill_registry
-from openharness.skills.loader import discover_project_skill_dirs, get_user_skill_dirs
-from openharness.skills.bundled import _parse_frontmatter as parse_bundled_frontmatter
-from openharness.skills.loader import _parse_skill_markdown as parse_skill_markdown
+from daoyi.config.settings import Settings
+from daoyi.skills import get_user_skills_dir, load_skill_registry
+from daoyi.skills.loader import discover_project_skill_dirs, get_user_skill_dirs
+from daoyi.skills.bundled import _parse_frontmatter as parse_bundled_frontmatter
+from daoyi.skills.loader import _parse_skill_markdown as parse_skill_markdown
 
 
 def test_load_skill_registry_includes_bundled(tmp_path: Path, monkeypatch):
@@ -66,7 +66,7 @@ def test_load_skill_registry_includes_user_compat_skill_dirs(tmp_path: Path, mon
     assert str(agents_skill) in (registry.get("agents-plan").path or "")  # type: ignore[union-attr]
 
 
-def test_get_user_skill_dirs_includes_openharness_claude_and_agents(tmp_path: Path, monkeypatch):
+def test_get_user_skill_dirs_includes_daoyi_claude_and_agents(tmp_path: Path, monkeypatch):
     monkeypatch.setenv("OPENHARNESS_CONFIG_DIR", str(tmp_path / "config"))
     monkeypatch.setattr(Path, "home", lambda: tmp_path / "home")
 
@@ -118,7 +118,7 @@ def test_project_skills_load_by_default_from_supported_dirs(tmp_path: Path, monk
     monkeypatch.setattr(Path, "home", lambda: tmp_path / "home")
     repo = tmp_path / "repo"
     (repo / ".git").mkdir(parents=True)
-    _write_skill(repo / ".openharness" / "skills", "oh-project")
+    _write_skill(repo / ".daoyi" / "skills", "oh-project")
     _write_skill(repo / ".agents" / "skills", "agents-project")
     _write_skill(repo / ".claude" / "skills", "claude-project")
 

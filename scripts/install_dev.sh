@@ -38,8 +38,8 @@ for arg in "$@"; do
             echo "Installs the current checkout in editable mode and"
             echo "registers oh/ohmo in ~/.local/bin."
             echo ""
-            echo "  default         use ./ .openharness-venv inside the current repo"
-            echo "  --global-venv   use ~/.openharness-venv but still install the current repo"
+            echo "  default         use ./ .daoyi-venv inside the current repo"
+            echo "  --global-venv   use ~/.daoyi-venv but still install the current repo"
             echo "  --with-channels deprecated compatibility flag; common IM deps install by default"
             exit 0
             ;;
@@ -53,9 +53,9 @@ done
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 if [ "$GLOBAL_VENV" = true ]; then
-    VENV_DIR="$HOME/.openharness-venv"
+    VENV_DIR="$HOME/.daoyi-venv"
 else
-    VENV_DIR="$REPO_ROOT/.openharness-venv"
+    VENV_DIR="$REPO_ROOT/.daoyi-venv"
 fi
 BIN_DIR="$HOME/.local/bin"
 
@@ -121,7 +121,7 @@ step "Registering global commands"
 mkdir -p "$BIN_DIR"
 ln -snf "$VENV_DIR/bin/oh" "$BIN_DIR/oh"
 ln -snf "$VENV_DIR/bin/ohmo" "$BIN_DIR/ohmo"
-ln -snf "$VENV_DIR/bin/openharness" "$BIN_DIR/openharness"
+ln -snf "$VENV_DIR/bin/daoyi" "$BIN_DIR/daoyi"
 success "Linked oh/ohmo into ${BIN_DIR}"
 
 ensure_path_in_file() {

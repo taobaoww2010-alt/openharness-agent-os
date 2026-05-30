@@ -7,8 +7,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from openharness.api.cpp_client import CppLLMClient
-from openharness.task_workflow.skill_discovery import get_skill_matcher
+from daoyi.api.cpp_client import CppLLMClient
+from daoyi.task_workflow.skill_discovery import get_skill_matcher
 
 
 async def test_remote_llm():
@@ -34,7 +34,7 @@ async def test_remote_llm():
     response_text = ""
 
     try:
-        from openharness.api.client import ApiMessageCompleteEvent
+        from daoyi.api.client import ApiMessageCompleteEvent
 
         # 使用实际的消息列表
         request_messages = [
@@ -111,8 +111,8 @@ async def test_skill_executor_list():
     print("测试 3: SKILL 执行器列表")
     print("=" * 60)
 
-    from openharness.tools.skill_executor_tool import SkillExecutorTool, SkillExecutorInput
-    from openharness.tools.base import ToolExecutionContext
+    from daoyi.tools.skill_executor_tool import SkillExecutorTool, SkillExecutorInput
+    from daoyi.tools.base import ToolExecutionContext
 
     tool = SkillExecutorTool()
     context = ToolExecutionContext(cwd=Path.cwd())

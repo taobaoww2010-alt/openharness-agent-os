@@ -1,0 +1,45 @@
+name: Publish to PyPI
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      pypi_target:
+        description: "PyPI target"
+        type: choice
+        options: [pypi, testpypi]
+        default: testpypi
+
+jobs:
+  build-and-publish:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build
+        run: pip install build
+
+      - name: Build package
+        run: python -m build
+
+      - name: Publish to PyPI
+        if: ${{ github.event_name == 'release' || inputs.pypi_target == 'pypi' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+      - name: Publish to TestPyPI
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.pypi_target == 'testpypi' }}
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/

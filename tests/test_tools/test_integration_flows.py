@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import asyncio
 import re
+import sys
 from pathlib import Path
 
 import pytest
 
-from openharness.tasks.manager import get_task_manager
-from openharness.tools import create_default_tool_registry
-from openharness.tools.base import ToolExecutionContext
+from daoyi.tasks.manager import get_task_manager
+from daoyi.tools import create_default_tool_registry
+from daoyi.tools.base import ToolExecutionContext
 
 
 async def _wait_for_terminal_task(task_id: str, *, timeout_seconds: float = 2.0) -> None:
@@ -155,7 +156,7 @@ async def test_agent_send_message_flow_restarts_completed_agent(tmp_path: Path, 
         agent.input_model(
             description="echo agent",
             prompt="ready",
-            command="python -u -c \"import sys; print('AGENT_ECHO:' + sys.stdin.readline().strip())\"",
+            command=f"{sys.executable} -u -c \"import sys; print('AGENT_ECHO:' + sys.stdin.readline().strip())\"",
         ),
         context,
     )

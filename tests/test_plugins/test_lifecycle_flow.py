@@ -8,13 +8,13 @@ from pathlib import Path
 
 import pytest
 
-from openharness.config.settings import Settings, load_settings
-from openharness.mcp.client import McpClientManager
-from openharness.mcp.config import load_mcp_server_configs
-from openharness.plugins import load_plugins
-from openharness.plugins.installer import install_plugin_from_path, uninstall_plugin
-from openharness.tools import create_default_tool_registry
-from openharness.tools.base import ToolExecutionContext
+from daoyi.config.settings import Settings, load_settings
+from daoyi.mcp.client import McpClientManager
+from daoyi.mcp.config import load_mcp_server_configs
+from daoyi.plugins import load_plugins
+from daoyi.plugins.installer import install_plugin_from_path, uninstall_plugin
+from daoyi.tools import create_default_tool_registry
+from daoyi.tools.base import ToolExecutionContext
 
 
 def _write_plugin(source_root: Path, server_script: Path) -> Path:

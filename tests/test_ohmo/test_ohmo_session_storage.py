@@ -1,8 +1,8 @@
 import json
 from pathlib import Path
 
-from openharness.api.usage import UsageSnapshot
-from openharness.engine.messages import ConversationMessage
+from daoyi.api.usage import UsageSnapshot
+from daoyi.engine.messages import ConversationMessage
 
 from ohmo.session_storage import OhmoSessionBackend, get_session_dir
 from ohmo.workspace import initialize_workspace

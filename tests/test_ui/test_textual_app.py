@@ -4,10 +4,10 @@ from __future__ import annotations
 
 import pytest
 
-from openharness.api.client import ApiMessageCompleteEvent
-from openharness.api.usage import UsageSnapshot
-from openharness.engine.messages import ConversationMessage, TextBlock, ToolUseBlock
-from openharness.ui.textual_app import OpenHarnessTerminalApp
+from daoyi.api.client import ApiMessageCompleteEvent
+from daoyi.api.usage import UsageSnapshot
+from daoyi.engine.messages import ConversationMessage, TextBlock, ToolUseBlock
+from daoyi.ui.textual_app import OpenHarnessTerminalApp
 
 
 class StaticApiClient:
@@ -62,6 +62,9 @@ async def test_textual_app_runs_one_model_turn(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("OPENHARNESS_CONFIG_DIR", str(tmp_path / "config"))
     monkeypatch.setenv("OPENHARNESS_DATA_DIR", str(tmp_path / "data"))
+    monkeypatch.setenv("DAOYI_HOME", str(tmp_path))
+    monkeypatch.setattr("daoyi.llm.small_model.SmallModelClient.is_available", lambda: False)
+    monkeypatch.setattr("daoyi.llm.small_model.SmallModelClient.get_instance", lambda: None)
 
     app = OpenHarnessTerminalApp(api_client=StaticApiClient("hello from textual"))
     async with app.run_test() as pilot:
@@ -79,6 +82,19 @@ async def test_textual_app_handles_ask_user_tool(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setenv("OPENHARNESS_CONFIG_DIR", str(tmp_path / "config"))
     monkeypatch.setenv("OPENHARNESS_DATA_DIR", str(tmp_path / "data"))
+    monkeypatch.setenv("DAOYI_HOME", str(tmp_path))
+    monkeypatch.setattr("daoyi.llm.small_model.SmallModelClient.is_available", lambda: False)
+    monkeypatch.setattr("daoyi.llm.small_model.SmallModelClient.get_instance", lambda: None)
+
+    # Prevent WorkflowExecutor.chat() from consuming a ScriptedApiClient
+    # response before the normal agent loop gets a chance to use it.
+    from daoyi.engine.stream_events import StatusEvent
+    async def _fake_chat(self, user_input, model):
+        yield StatusEvent(message="retrying — fall through to full agent loop")
+    monkeypatch.setattr(
+        "daoyi.task_workflow.executor.WorkflowExecutor.chat",
+        _fake_chat,
+    )
 
     app = OpenHarnessTerminalApp(
         api_client=ScriptedApiClient(
@@ -107,6 +123,9 @@ async def test_textual_app_handles_ask_user_tool(tmp_path, monkeypatch):
 
     app._ask_question = _answer
     async with app.run_test() as pilot:
+        # Disable workflow fast paths — ask_user_question only works in
+        # the normal agent loop (QueryEngine), not WorkflowExecutor.
+        app._bundle.workflow_registry = None
         composer = app.query_one("#composer")
         composer.value = "hi"
         await pilot.press("enter")

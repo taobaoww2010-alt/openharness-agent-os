@@ -5,9 +5,9 @@ from __future__ import annotations
 from pathlib import Path
 from re import sub
 
-from openharness.commands import MemoryCommandBackend
-from openharness.memory.scan import scan_memory_files
-from openharness.memory.schema import (
+from daoyi.commands import MemoryCommandBackend
+from daoyi.memory.scan import scan_memory_files
+from daoyi.memory.schema import (
     SCHEMA_VERSION,
     coerce_int,
     compute_memory_signature,
@@ -19,8 +19,8 @@ from openharness.memory.schema import (
     split_memory_file,
     utc_now,
 )
-from openharness.utils.file_lock import exclusive_file_lock
-from openharness.utils.fs import atomic_write_text
+from daoyi.utils.file_lock import exclusive_file_lock
+from daoyi.utils.fs import atomic_write_text
 
 from ohmo.workspace import get_memory_dir, get_memory_index_path
 

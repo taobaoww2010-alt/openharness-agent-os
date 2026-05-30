@@ -5,13 +5,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from openharness.config.settings import Settings
-from openharness.mcp.config import load_mcp_server_configs
-from openharness.mcp.types import McpResourceInfo, McpStdioServerConfig, McpToolInfo
-from openharness.plugins.types import LoadedPlugin
-from openharness.plugins.schemas import PluginManifest
-from openharness.tools import create_default_tool_registry
-from openharness.tools.base import ToolExecutionContext
+from daoyi.config.settings import Settings
+from daoyi.mcp.config import load_mcp_server_configs
+from daoyi.mcp.types import McpResourceInfo, McpStdioServerConfig, McpToolInfo
+from daoyi.plugins.types import LoadedPlugin
+from daoyi.plugins.schemas import PluginManifest
+from daoyi.tools import create_default_tool_registry
+from daoyi.tools.base import ToolExecutionContext
 
 
 @dataclass

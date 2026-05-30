@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from openharness.tools.skill_executor_tool import (
+from daoyi.tools.skill_executor_tool import (
     SkillExecutorTool,
     SkillExecutorInput,
     get_skill_commands,

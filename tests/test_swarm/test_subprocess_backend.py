@@ -7,10 +7,10 @@ import sys
 
 import pytest
 
-from openharness.tasks.manager import BackgroundTaskManager
-from openharness.tasks.types import TaskRecord
-from openharness.swarm.subprocess_backend import SubprocessBackend
-from openharness.swarm.types import TeammateSpawnConfig
+from daoyi.tasks.manager import BackgroundTaskManager
+from daoyi.tasks.types import TaskRecord
+from daoyi.swarm.subprocess_backend import SubprocessBackend
+from daoyi.swarm.types import TeammateSpawnConfig
 
 
 def _argv_str(captured: dict) -> str:
@@ -36,7 +36,7 @@ async def test_subprocess_backend_forwards_system_prompt_in_command(monkeypatch,
         )
 
     monkeypatch.setattr(BackgroundTaskManager, "create_agent_task", _fake_create_agent_task)
-    monkeypatch.setattr("openharness.swarm.subprocess_backend.get_teammate_command", lambda: "/usr/bin/python3")
+    monkeypatch.setattr("daoyi.swarm.subprocess_backend.get_teammate_command", lambda: "/usr/bin/python3")
 
     backend = SubprocessBackend()
     config = TeammateSpawnConfig(
@@ -74,7 +74,7 @@ async def test_subprocess_backend_forwards_append_system_prompt_mode(monkeypatch
         )
 
     monkeypatch.setattr(BackgroundTaskManager, "create_agent_task", _fake_create_agent_task)
-    monkeypatch.setattr("openharness.swarm.subprocess_backend.get_teammate_command", lambda: "/usr/bin/python3")
+    monkeypatch.setattr("daoyi.swarm.subprocess_backend.get_teammate_command", lambda: "/usr/bin/python3")
 
     backend = SubprocessBackend()
     config = TeammateSpawnConfig(
@@ -168,7 +168,7 @@ async def test_subprocess_backend_argv_preserves_windows_backslashes(
             argv=list(kwargs.get("argv") or []),
         )
 
-    win_path = r"C:\Users\simu\AppData\Roaming\uv\tools\openharness-ai\Scripts\python.exe"
+    win_path = r"C:\Users\simu\AppData\Roaming\uv\tools\daoyi-ai\Scripts\python.exe"
     monkeypatch.setattr(BackgroundTaskManager, "create_agent_task", _fake_create_agent_task)
     # Use the public override env var rather than monkeypatching the
     # function symbol — proved fragile under full-suite pytest module
@@ -214,7 +214,7 @@ async def test_subprocess_backend_passes_env_via_kwarg(
 
     monkeypatch.setattr(BackgroundTaskManager, "create_agent_task", _fake_create_agent_task)
     monkeypatch.setattr(
-        "openharness.swarm.subprocess_backend.get_teammate_command",
+        "daoyi.swarm.subprocess_backend.get_teammate_command",
         lambda: "/usr/bin/python3",
     )
 

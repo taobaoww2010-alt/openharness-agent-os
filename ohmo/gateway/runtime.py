@@ -11,16 +11,16 @@ import json
 import os
 import string
 
-from openharness.channels.bus.events import InboundMessage
-from openharness.commands import CommandContext, CommandResult, lookup_skill_slash_command
-from openharness.engine.messages import (
+from daoyi.channels.bus.events import InboundMessage
+from daoyi.commands import CommandContext, CommandResult, lookup_skill_slash_command
+from daoyi.engine.messages import (
     ConversationMessage,
     ImageBlock,
     TextBlock,
     sanitize_conversation_messages,
 )
-from openharness.engine.query import MaxTurnsExceeded
-from openharness.engine.stream_events import (
+from daoyi.engine.query import MaxTurnsExceeded
+from daoyi.engine.stream_events import (
     AssistantTextDelta,
     AssistantTurnComplete,
     CompactProgressEvent,
@@ -29,8 +29,8 @@ from openharness.engine.stream_events import (
     ToolExecutionCompleted,
     ToolExecutionStarted,
 )
-from openharness.prompts import build_runtime_system_prompt
-from openharness.ui.runtime import RuntimeBundle, _last_user_text, build_runtime, close_runtime, start_runtime
+from daoyi.prompts import build_runtime_system_prompt
+from daoyi.ui.runtime import RuntimeBundle, _last_user_text, build_runtime, close_runtime, start_runtime
 
 from ohmo.gateway.config import load_gateway_config
 from ohmo.gateway.group_tool import CreateFeishuGroup, OhmoCreateFeishuGroupTool, PublishGroupWelcome

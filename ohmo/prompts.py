@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from openharness.memory import load_memory_prompt as load_project_memory_prompt
-from openharness.prompts.system_prompt import get_base_system_prompt
+from daoyi.memory import load_memory_prompt as load_project_memory_prompt
+from daoyi.prompts.system_prompt import get_base_system_prompt
 
 from ohmo.memory import load_memory_prompt as load_ohmo_memory_prompt
 from ohmo.workspace import (

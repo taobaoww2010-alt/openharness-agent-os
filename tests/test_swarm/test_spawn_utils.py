@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 
-from openharness.swarm.spawn_utils import (
+from daoyi.swarm.spawn_utils import (
     TEAMMATE_COMMAND_ENV_VAR,
     build_inherited_cli_flags,
     build_inherited_env_vars,
@@ -29,15 +29,15 @@ def test_build_inherited_env_vars_disables_coordinator_mode(monkeypatch):
     assert env["CLAUDE_CODE_COORDINATOR_MODE"] == "0"
 
 
-def test_build_inherited_env_vars_forwards_openharness_config_dir(monkeypatch):
-    monkeypatch.setenv("OPENHARNESS_CONFIG_DIR", "/opt/data/.openharness")
+def test_build_inherited_env_vars_forwards_daoyi_config_dir(monkeypatch):
+    monkeypatch.setenv("OPENHARNESS_CONFIG_DIR", "/opt/data/.daoyi")
 
     env = build_inherited_env_vars()
 
-    assert env["OPENHARNESS_CONFIG_DIR"] == "/opt/data/.openharness"
+    assert env["OPENHARNESS_CONFIG_DIR"] == "/opt/data/.daoyi"
 
 
-def test_build_inherited_env_vars_includes_openharness_auth_vars(monkeypatch):
+def test_build_inherited_env_vars_includes_daoyi_auth_vars(monkeypatch):
     monkeypatch.setenv("OPENHARNESS_PROVIDER", "openai")
     monkeypatch.setenv("OPENHARNESS_BASE_URL", "https://relay.example.com/v1")
     monkeypatch.setenv("OPENHARNESS_OPENAI_API_KEY", "sk-oh-openai")

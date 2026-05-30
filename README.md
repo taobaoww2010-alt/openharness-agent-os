@@ -1,9 +1,7 @@
 <h1 align="center">
-  <img src="assets/logo.png" alt="OpenHarness" width="64" style="vertical-align: middle;">
-  &nbsp;&nbsp;
-  <img src="assets/ohmo.png" alt="ohmo" width="64" style="vertical-align: middle;">
+  <img src="assets/logo.png" alt="DaoYi Agent OS" width="64" style="vertical-align: middle;">
   <br>
-  <code>oh</code> — OpenHarness &amp; <code>ohmo</code>
+  <code>dy</code> — DaoYi Agent OS
 </h1>
 
 <p align="center">
@@ -11,41 +9,35 @@
   <a href="README.zh-CN.md"><strong>简体中文</strong></a>
 </p>
 
-**OpenHarness** delivers core lightweight agent infrastructure: tool-use, skills, memory, and multi-agent coordination.
+**DaoYi Agent OS** (formerly OpenHarness) delivers core lightweight agent infrastructure: intent-driven skill orchestration, tool-use, memory, and multi-agent coordination. Named after the Chinese concept "道易" — the path is simple.
 
-**ohmo** is a personal AI agent built on OpenHarness — not another chatbot, but an assistant that actually works for you over long sessions. Chat with ohmo in Feishu / Slack / Telegram / Discord, and it forks branches, writes code, runs tests, and opens PRs on its own. ohmo runs on your existing Claude Code or Codex subscription — no extra API key needed.
-
-**Join the community**: contribute **Harness** for open agent development.
+Architecture: small model (Qwen3-2B local) pre-classifies intent → matches skills → lazy-loads `<available-skills>` block → remote LLM (Qwen3VL-8B) executes with read_skill + skill_executor tools. All 51 skills tiered (core/dev/ai/pro/lite), workspace-isolated via git worktree, no C++ compilation needed for development.
 
 <p align="center">
   <a href="#-quick-start"><img src="https://img.shields.io/badge/Quick_Start-5_min-blue?style=for-the-badge" alt="Quick Start"></a>
   <a href="#-harness-architecture"><img src="https://img.shields.io/badge/Harness-Architecture-ff69b4?style=for-the-badge" alt="Architecture"></a>
-  <a href="#-features"><img src="https://img.shields.io/badge/Tools-43+-green?style=for-the-badge" alt="Tools"></a>
-  <a href="#-test-results"><img src="https://img.shields.io/badge/Tests-114_Passing-brightgreen?style=for-the-badge" alt="Tests"></a>
+  <a href="#-features"><img src="https://img.shields.io/badge/Tools-41+-green?style=for-the-badge" alt="Tools"></a>
+  <a href="#-test-results"><img src="https://img.shields.io/badge/Tests-1161_Passing-brightgreen?style=for-the-badge" alt="Tests"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License"></a>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/python-≥3.10-blue?logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/React+Ink-TUI-61DAFB?logo=react&logoColor=white" alt="React">
-  <img src="https://img.shields.io/badge/pytest-114_pass-brightgreen" alt="Pytest">
-  <img src="https://img.shields.io/badge/E2E-6_suites-orange" alt="E2E">
+  <img src="https://img.shields.io/badge/pytest-1161_pass-brightgreen" alt="Pytest">
+  <img src="https://img.shields.io/badge/small_model-Qwen3_2B_local-8A2BE2" alt="Small Model">
+  <img src="https://img.shields.io/badge/remote_LLM-Qwen3VL_8B-orange" alt="Remote LLM">
+  <img src="https://img.shields.io/badge/Skills-51_tiered-blueviolet" alt="Skills">
   <img src="https://img.shields.io/badge/output-text_|_json_|_stream--json-blueviolet" alt="Output">
-  <a href="https://github.com/HKUDS/OpenHarness/actions/workflows/ci.yml"><img src="https://github.com/HKUDS/OpenHarness/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/HKUDS/.github/blob/main/profile/README.md"><img src="https://img.shields.io/badge/Feishu-Group-E9DBFC?style=flat&logo=feishu&logoColor=white" alt="Feishu"></a>
-  <a href="https://github.com/HKUDS/.github/blob/main/profile/README.md"><img src="https://img.shields.io/badge/WeChat-Group-C5EAB4?style=flat&logo=wechat&logoColor=white" alt="WeChat"></a>
 </p>
 
-One Command (**oh**) to Launch **OpenHarness** and Unlock All Agent Harnesses. 
-
-Supports CLI agent integration including OpenClaw, nanobot, Cursor, and more.
+**Architecture**: Local Qwen3-2B classifies intent → 51 tiered skills (core/dev/ai/pro/lite) → lazy `<available-skills>` injection → remote Qwen3VL-8B calls `read_skill` + `skill_executor`. Workspace isolation via git worktree. No C++ compilation needed for skill development.
 
 <p align="center">
-  <img src="assets/cli-typing.gif" alt="OpenHarness Terminal Demo" width="800">
+  <img src="assets/cli-typing.gif" alt="DaoYi Agent OS Terminal Demo" width="800">
 </p>
 
 ---
-## ✨ OpenHarness's Key Harness Features
+## ✨ DaoYi Agent OS Key Features
 
 <table align="center" width="100%">
 <tr>
@@ -138,50 +130,34 @@ Supports CLI agent integration including OpenClaw, nanobot, Cursor, and more.
 
 An **Agent Harness** is the complete infrastructure that wraps around an LLM to make it a functional agent. The model provides intelligence; the harness provides **hands, eyes, memory, and safety boundaries**.
 
+DaoYi adds a unique twist: a **local small model** (Qwen3-2B) pre-classifies user intent before the remote LLM sees anything — enabling tiered skill matching, continuation detection, and early "no capability" stop without ever hitting the network.
+
 <p align="center">
-  <img src="assets/harness-equation.png" alt="Harness = Tools + Knowledge + Observation + Action + Permissions" width="700">
+  <img src="assets/harness-equation.png" alt="Harness = Small Model + LLM + Skills + Isolation" width="700">
 </p>
 
-OpenHarness is an open-source Python implementation designed for **researchers, builders, and the community**:
+DaoYi Agent OS is an open-source Python implementation designed for **researchers, builders, and the community**:
 
 - **Understand** how production AI agents work under the hood
 - **Experiment** with cutting-edge tools, skills, and agent coordination patterns
-- **Extend** the harness with custom plugins, providers, and domain knowledge
+- **Extend** with custom plugins, providers, and domain knowledge
 - **Build** specialized agents on top of proven architecture
 
 ---
 
 ## 📰 What's New
 
-- **Unreleased** 🔍 **Dry-run safe preview**:
-  - `oh --dry-run` previews resolved runtime settings, auth state, skills, commands, tools, and configured MCP servers without executing the model, tools, or subagents.
-  - Dry-run now reports a `ready` / `warning` / `blocked` readiness verdict with concrete next-step suggestions such as fixing auth, fixing MCP config, or running the prompt directly.
-  - Prompt previews include likely matching skills and tools, while slash-command previews show whether the command is mostly read-only or stateful.
-- **2026-04-18** ⚙️ **v0.1.7** — Packaging & TUI polish:
-  - Install script now links `oh`, `ohmo`, and `openharness` into `~/.local/bin` instead of prepending the virtualenv `bin` directory to `PATH`, which avoids clobbering Conda-managed shells.
-  - React TUI now supports `Shift+Enter` to insert a newline while keeping plain `Enter` as submit.
-  - Busy-state animation in the React TUI is quieter and less error-prone on Windows terminals, with conservative spinner frames and reduced flashing.
-- **2026-04-10** 🧠 **v0.1.6** — Auto-Compaction & Markdown TUI:
-  - Auto-Compaction preserves task state and channel logs across context compression — agents can run multi-day sessions without manual compact/clear
-  - Subprocess teammates run in headless worker mode; agent team creation stabilized
-  - Assistant messages now render full Markdown in the React TUI
-  - `ohmo` gains channel slash commands and multimodal attachment support
-- **2026-04-08** 🔌 **v0.1.5** — MCP HTTP transport & Swarm polling:
-  - MCP protocol adds HTTP transport, auto-reconnect on disconnect, and tool-only server compatibility
-  - JSON Schema types inferred for MCP tool inputs — no manual type mapping needed
-  - `ohmo` channels support file attachments and multimodal gateway messages
-  - Subprocess agents are now pollable in real runs; permission modals serialized to prevent input swallowing
-- **2026-04-08** 🌙 **v0.1.4** — Multi-provider auth & Moonshot/Kimi:
-  - Native Moonshot/Kimi provider with `reasoning_content` support for thinking models
-  - Auth overhaul: fixed provider-switching key mismatch, `OPENAI_BASE_URL` env override, profile-scoped credential priority
-  - MCP gracefully handles disconnected servers in `call_tool` / `read_resource`
-  - Security: built-in sensitive-path protection in PermissionChecker, hardened `web_fetch` URL validation
-  - Stability: EIO crash recovery in Ink TUI, `--debug` logging, Windows cmd flash fix
-- **2026-04-06** 🚀 **v0.1.2** — Unified setup flows and `ohmo` personal-agent app:
-  - `oh setup` now guides provider selection as workflows instead of exposing raw auth/provider internals
-  - Compatible API setup is now profile-scoped, so Anthropic/OpenAI-compatible endpoints can keep separate keys
-  - `ohmo` ships as a packaged app with `~/.ohmo` workspace, gateway, bootstrap prompts, and channel config flow
-- **2026-04-01** 🎨 **v0.1.0** — Initial **OpenHarness** open-source release featuring complete Harness architecture: 
+- **2026-05-29** 🧠 **PilotDeck P0-P3** — Skill lazy loading, continuation detection, tier prompts, workspace isolation:
+  - `<available-skills>` block injects only name+desc+tier (~500 tokens saved per round)
+  - "继续"/"go"/"然后呢" detected as continuation → inherits last intent (~30% fewer mis-classifications)
+  - `git worktree` isolation for sandboxed tool execution with auto-cleanup
+  - 51 skills organized into 5 tiers (core/dev/ai/pro/lite)
+- **2026-05-27** 🔄 **Project rename OpenHarness → DaoYi Agent OS**:
+  - CLI `oh` → `dy`, config `~/.openharness/` → `~/.daoyi/`, env vars `DAOYI_*` primary + `OPENHARNESS_*` backward compat
+  - 310+ files renamed, package name `daoyi-agent-os` on PyPI
+- **2026-05-27** 🎯 **Web search reliability** — wttr.in weather API fallback, Baidu CAPTCHA detection, DuckDuckGo then Bing chain
+- **2026-05-25** 🤖 **Small model upgrade** — Qwen2.5-0.5B → Qwen3-2B-VL Q4_K_M; model thinking streamed to frontend
+- **2026-04-18** ⚙️ **v0.1.7** — Packaging & TUI polish 
 
 <p align="center">
   <strong>Start here:</strong>
@@ -201,30 +177,21 @@ OpenHarness is an open-source Python implementation designed for **researchers, 
 #### Linux / macOS / WSL
 
 ```bash
-# One-click install
-curl -fsSL https://raw.githubusercontent.com/HKUDS/OpenHarness/main/scripts/install.sh | bash
-
-# Or via pip
-pip install openharness-ai
+# Via pip
+pip install daoyi-agent-os
 ```
 
 #### Windows (Native)
 
 ```powershell
-# One-click install (PowerShell)
-iex (Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/HKUDS/OpenHarness/main/scripts/install.ps1')
-
-# Or via pip
-pip install openharness-ai
+# Via pip
+pip install daoyi-agent-os
 ```
-
-**Note**: Windows support is now native. In PowerShell, use `openh` instead of `oh` because `oh` can resolve to the built-in `Out-Host` alias.
 
 ### 2. Configure
 
 ```bash
-oh setup    # interactive wizard — pick a provider, authenticate, done
-# On Windows PowerShell, use: openh setup
+dy setup    # interactive wizard — pick a provider, authenticate, done
 ```
 
 Supports **Claude / OpenAI / Copilot / Codex / Moonshot(Kimi) / GLM / MiniMax / NVIDIA NIM** and any compatible endpoint.
@@ -232,84 +199,34 @@ Supports **Claude / OpenAI / Copilot / Codex / Moonshot(Kimi) / GLM / MiniMax / 
 ### 3. Run
 
 ```bash
-oh
-# On Windows PowerShell, use: openh
+dy
 ```
 
 <p align="center">
-  <img src="assets/landing.png" alt="OpenHarness Landing Screen" width="700">
+  <img src="assets/landing.png" alt="DaoYi Agent OS Landing Screen" width="700">
 </p>
-
-### 4. Set up ohmo (Personal Agent)
-
-Want an AI agent that works for you from Feishu / Slack / Telegram / Discord?
-
-```bash
-ohmo init             # initialize ~/.ohmo workspace
-ohmo config           # configure channels and provider
-ohmo gateway start    # start the gateway — ohmo is now live in your chat app
-```
-
-ohmo runs on your existing **Claude Code subscription** or **Codex subscription** — no extra API key needed.
 
 ### Non-Interactive Mode (Pipes & Scripts)
 
 ```bash
 # Single prompt → stdout
-oh -p "Explain this codebase"
+dy -p "Explain this codebase"
 
 # JSON output for programmatic use
-oh -p "List all functions in main.py" --output-format json
+dy -p "List all functions in main.py" --output-format json
 
 # Stream JSON events in real-time
-oh -p "Fix the bug" --output-format stream-json
+dy -p "Fix the bug" --output-format stream-json
 ```
-
-### Dry Run (Safe Preview)
-
-Use `--dry-run` when you want to inspect what OpenHarness would use before any live execution starts.
-
-```bash
-# Preview an interactive session setup
-oh --dry-run
-
-# Preview one prompt without executing the model or tools
-oh --dry-run -p "Review this bug fix and grep for failing tests"
-
-# Preview a slash command path
-oh --dry-run -p "/plugin list"
-
-# Get structured output for scripts or channels
-oh --dry-run -p "Explain this repository" --output-format json
-```
-
-Dry-run is intentionally static:
-
-- It does **not** call the model
-- It does **not** execute tools or spawn subagents
-- It does **not** connect to MCP servers
-- It **does** resolve settings, auth status, prompt assembly, skills, commands, tools, and obvious MCP config problems
-
-Readiness levels:
-
-- `ready`: configuration looks usable; the next suggested action is usually to run the prompt directly
-- `warning`: OpenHarness can resolve the session, but something important still looks wrong, such as broken MCP config or missing auth for later model work
-- `blocked`: the requested path will not run successfully as-is, for example an unknown slash command or a prompt that cannot resolve a runtime client
-
-`next actions` in the dry-run output tell you the shortest fix or follow-up step, such as:
-
-- run `oh auth login`
-- fix or disable broken MCP configuration
-- run the prompt directly with `oh -p "..."` or open the interactive UI with `oh`
 
 ## 🔌 Provider Compatibility
 
-OpenHarness treats providers as **workflows** backed by named profiles. In day-to-day use, prefer:
+DaoYi Agent OS treats providers as **workflows** backed by named profiles. In day-to-day use, prefer:
 
 ```bash
-oh setup
-oh provider list
-oh provider use <profile>
+dy setup
+dy provider list
+dy provider use <profile>
 ```
 
 ### Built-in Workflows
@@ -423,7 +340,7 @@ oh auth copilot-login
 uv run oh --api-format copilot
 
 # Or via environment variable
-export OPENHARNESS_API_FORMAT=copilot
+export DAOYI_API_FORMAT=copilot
 uv run oh
 
 # Check auth status
@@ -443,12 +360,54 @@ oh auth copilot-logout
 
 ---
 
-## 🏗️ Harness Architecture
+## 🏗️ DaoYi Agent OS Architecture
 
-OpenHarness implements the core Agent Harness pattern with 10 subsystems:
+Two-stage architecture: **small model (local)** classifies intent → **large model (remote)** executes.
 
 ```
-openharness/
+┌─────────────────────────────────────────────────────┐
+│ pre_classify()                                      │
+│  ├─ Short continuation? → inherit last intent       │
+│  ├─ SmallModel (Qwen3-2B Q4_K_M) → 6 categories     │
+│  ├─ RuleClassifier (Python regex)                   │
+│  └─ C++ Classifier (fallback)                       │
+├─────────────────────────────────────────────────────┤
+│ SkillMatcher → top-5 skills by intent               │
+│ SkillContextInjector → <available-skills> block     │
+│   format: name + one-line desc + [tier]             │
+├─────────────────────────────────────────────────────┤
+│ LLM (Qwen3VL-8B remote or C++ local)                │
+│  ├─ reads <available-skills> → calls read_skill     │
+│  ├─ reads full commands → calls skill_executor      │
+│  ├─ or calls built-in tools (bash, read, write...)  │
+│  └─ ThinkingDelta streamed to frontend              │
+├─────────────────────────────────────────────────────┤
+│ WorkspaceProvider (P3)                              │
+│  ├─ GitWorktreeProvider (fast, shared objects)      │
+│  └─ SnapshotCopyProvider (rsync fallback)            │
+└─────────────────────────────────────────────────────┘
+```
+
+### Key Subsystems
+
+```
+daoyi/
+  task_workflow/   # 🧠 Agent Loop + Skill orchestration
+  tools/           # 🔧 41 Tools — file I/O, shell, search, web, MCP
+  skills/          # 📚 Knowledge — 51 tiered skills (core/dev/ai/pro/lite)
+  plugins/         # 🔌 Extensions — commands, hooks, agents, MCP servers
+  permissions/     # 🛡️ Safety — multi-level modes, path rules, command deny
+  hooks/           # ⚡ Lifecycle — PreToolUse/PostToolUse event hooks
+  commands/        # 💬 Commands — /help, /commit, /plan, /resume, ...
+  mcp/             # 🌐 MCP — Model Context Protocol client
+  memory/          # 🧠 Memory — persistent cross-session knowledge
+  tasks/           # 📋 Tasks — background task management
+  coordinator/     # 🤝 Multi-Agent — subagent spawning, team coordination
+  config/          # ⚙️ Settings — multi-layer config, env var fallback
+  ui/              # 🖥️ React TUI — backend protocol + frontend
+  sandbox/         # 🏝️ Workspace isolation — git worktree, snapshot copy
+```
+daoyi/
   engine/          # 🧠 Agent Loop — query → stream → tool-call → loop
   tools/           # 🔧 43 Tools — file I/O, shell, search, web, MCP
   skills/          # 📚 Knowledge — on-demand skill loading (.md files)
@@ -504,7 +463,7 @@ flowchart LR
 
 ## ✨ Features
 
-### 🔧 Tools (43+)
+### 🔧 Tools (41)
 
 | Category | Tools | Description |
 |----------|-------|-------------|
@@ -513,10 +472,11 @@ flowchart LR
 | **Notebook** | NotebookEdit | Jupyter notebook cell editing |
 | **Agent** | Agent, SendMessage, TeamCreate/Delete | Subagent spawning and coordination |
 | **Task** | TaskCreate/Get/List/Update/Stop/Output | Background task management |
+| **Skill** | SkillExecutor, ReadSkill, Skill | Dynamic skill loading and execution |
 | **MCP** | MCPTool, ListMcpResources, ReadMcpResource | Model Context Protocol integration |
 | **Mode** | EnterPlanMode, ExitPlanMode, Worktree | Workflow mode switching |
 | **Schedule** | CronCreate/List/Delete, RemoteTrigger | Scheduled and remote execution |
-| **Meta** | Skill, Config, Brief, Sleep, AskUser | Knowledge loading, configuration, interaction |
+| **Meta** | Config, Brief, Sleep, AskUser | Configuration and interaction |
 
 Every tool has:
 - **Pydantic input validation** — structured, type-safe inputs
@@ -524,62 +484,46 @@ Every tool has:
 - **Permission integration** — checked before every execution
 - **Hook support** — PreToolUse/PostToolUse lifecycle events
 
-### 📚 Skills System
+### 📚 Skills System (51 tiered skills)
 
-Skills are **on-demand knowledge** — loaded only when the model needs them:
+Skills are **lazy-loaded** via `<available-skills>` block — only names, one-line descriptions, and tiers are injected into context (~500 tokens saved per round). The LLM calls `read_skill` to load full command details on demand.
 
-```
-Available Skills:
-- commit: Create clean, well-structured git commits
-- review: Review code for bugs, security issues, and quality
-- debug: Diagnose and fix bugs systematically
-- plan: Design an implementation plan before coding
-- test: Write and run tests for code
-- simplify: Refactor code to be simpler and more maintainable
-- pdf: PDF processing with pypdf (from anthropics/skills)
-- xlsx: Excel operations (from anthropics/skills)
-- ... 40+ more
-```
+Five tiers:
 
-Skills can live in bundled, user, ohmo, project, or plugin locations. User-level skills are loaded from:
+| Tier | Description | Example skills |
+|------|-------------|----------------|
+| **core** | Built-in, always available | bash, read, write, edit, glob, grep |
+| **dev** | Development workflows | commit, review, test, debug, plan |
+| **ai** | AI/ML | pytorch, tensorflow, huggingface, onnx |
+| **pro** | Professional tools | gimp, blender, shotcut, sox, imagemagick |
+| **lite** | Lightweight utilities | pdf, xlsx, csvkit, yq, jq |
+
+Skills are discovered from:
 
 ```text
-~/.openharness/skills/<skill>/SKILL.md
-~/.claude/skills/<skill>/SKILL.md
-~/.agents/skills/<skill>/SKILL.md
+~/.daoyi/skills/<skill>/SKILL.md      # User-level
+~/.claude/skills/<skill>/SKILL.md      # Claude compat
+~/.agents/skills/<skill>/SKILL.md      # Agent compat
+<project>/.daoyi/skills/<skill>/SKILL.md  # Project-level
 ```
 
-Project-level skills are enabled by default and are discovered from the current working directory up to the git root:
-
-```text
-<project>/.openharness/skills/<skill>/SKILL.md
-<project>/.agents/skills/<skill>/SKILL.md
-<project>/.claude/skills/<skill>/SKILL.md
-```
-
-Disable project skills for untrusted repositories with:
-
-```bash
-oh config set allow_project_skills false
-```
-
-Use `/skills` to list loaded skills with their source and path. User-invocable skills can be run directly as slash commands, for example `/deploy staging`.
-
-**Compatible with [anthropics/skills](https://github.com/anthropics/skills)** — use the `SKILL.md` directory layout above.
+Compatible with [anthropics/skills](https://github.com/anthropics/skills).
 
 ### 🌐 Web search and proxy settings
 
-Built-in `web_search` uses DuckDuckGo HTML search by default. In regions where that endpoint is unreachable, point OpenHarness at a trusted public HTML search endpoint or your own SearXNG instance:
+Built-in `web_search` uses Baidu + DuckDuckGo + Bing chain. For weather queries, it first tries `wttr.in` (no API key needed, supports 40+ Chinese city names). Custom endpoints also supported:
 
 ```bash
-export OPENHARNESS_WEB_SEARCH_URL="https://your-searxng.example/search"
+export DAOYI_WEB_SEARCH_URL="https://your-searxng.example/search"
 ```
 
-`web_search` and `web_fetch` keep `trust_env=False` for SSRF safety, so they do not automatically inherit `HTTP_PROXY` / `HTTPS_PROXY`. If you need a proxy, opt in with an OpenHarness-specific variable:
+For proxy (SSRF-safe, `trust_env=False` by default):
 
 ```bash
-export OPENHARNESS_WEB_PROXY="http://127.0.0.1:7890"
+export DAOYI_WEB_PROXY="http://127.0.0.1:7890"
 ```
+
+Backward compatibility: `OPENHARNESS_WEB_SEARCH_URL` and `OPENHARNESS_WEB_PROXY` also work as fallbacks.
 
 The proxy URL must be HTTP/HTTPS and cannot contain embedded credentials.
 
@@ -620,7 +564,7 @@ Multi-level safety with fine-grained control:
 | Mode | Behavior | Use Case |
 |------|----------|----------|
 | **Default** | Ask before write/execute | Daily development |
-| **Auto** | Allow everything | Sandboxed environments |
+| **Auto** | Allow everything | Sandboxed environments (workspace isolation) |
 | **Plan Mode** | Block all writes | Large refactors, review first |
 
 **Path-level rules** in `settings.json`:
@@ -648,7 +592,7 @@ React/Ink TUI with full interactive experience:
 ### 📡 CLI
 
 ```
-oh [OPTIONS] COMMAND [ARGS]
+dy [OPTIONS] COMMAND [ARGS]
 
 Session:     -c/--continue, -r/--resume, -n/--name
 Model:       -m/--model, --effort, --max-turns
@@ -657,94 +601,43 @@ Permissions: --permission-mode, --dangerously-skip-permissions
 Context:     -s/--system-prompt, --append-system-prompt, --settings
 Advanced:    -d/--debug, --mcp-config, --bare
 
-Subcommands: oh setup | oh provider | oh auth | oh mcp | oh plugin
+Subcommands: dy setup | dy provider | dy auth | dy mcp | dy plugin
 ```
 
-### 🧑‍💼 ohmo Personal Agent
+### 🙋 Small Model Intelligence
 
-`ohmo` is a personal-agent app built on top of OpenHarness. It is packaged alongside `oh`, with its own workspace and gateway:
+Local Qwen3-2B-VL-Instruct Q4_K_M (1GB) handles pre-classification:
 
-```bash
-# Initialize personal workspace
-ohmo init
+- **6 categories**: code, tool, search, chat, plan, question
+- **Continuation detection**: "继续"/"go"/"然后呢" → inherits last intent
+- **Tier-aware**: classification prompt includes difficulty tier rules
+- **3-stage pipeline**: continuation check → SmallModel → RuleClassifier → C++ fallback
 
-# Configure gateway channels and pick a provider profile
-ohmo config
+### 🏝️ Workspace Isolation
 
-# Run the personal agent
-ohmo
-
-# Run the gateway in foreground
-ohmo gateway run
-
-# Check or restart the gateway
-ohmo gateway status
-ohmo gateway restart
-```
-
-Key concepts:
-
-- `~/.ohmo/`
-  - personal workspace root
-- `soul.md`
-  - long-term agent personality and behavior
-- `identity.md`
-  - who `ohmo` is
-- `user.md`
-  - user profile and preferences
-- `BOOTSTRAP.md`
-  - first-run landing ritual
-- `memory/`
-  - personal memory
-- `gateway.json`
-  - selected provider profile and channel configuration
-
-`ohmo config` uses the same workflow language as `oh setup`, so you can point the personal-agent gateway at:
-
-- `Anthropic-Compatible API`
-- `Claude Subscription`
-- `OpenAI-Compatible API`
-- `Codex Subscription`
-- `GitHub Copilot`
-
-`ohmo init` creates the home workspace once. After that, use `ohmo config` to update provider and channel settings; if the gateway is already running, the config flow can restart it for you.
-
-Currently `ohmo init` / `ohmo config` can guide channel setup for:
-
-- Telegram
-- Slack
-- Discord
-- Feishu
+Tools execute in isolated workspaces via `git worktree` (git repos) or `SnapshotCopyProvider` (rsync/copytree). Auto-created on `execute()` start, auto-cleaned on finish.
 
 ---
 
 ## 📊 Test Results
 
-| Suite | Tests | Status |
-|-------|-------|--------|
-| Unit + Integration | 114 | ✅ All passing |
-| CLI Flags E2E | 6 | ✅ Real model calls |
-| Harness Features E2E | 9 | ✅ Retry, skills, parallel, permissions |
-| React TUI E2E | 3 | ✅ Welcome, conversation, status |
-| TUI Interactions E2E | 4 | ✅ Commands, permissions, shortcuts |
-| Real Skills + Plugins | 12 | ✅ anthropics/skills + claude-code/plugins |
-
 ```bash
-# Run all tests
-uv run pytest -q                           # 114 unit/integration
-python scripts/test_harness_features.py     # Harness E2E
-python scripts/test_real_skills_plugins.py  # Real plugins E2E
+# Full suite
+uv run pytest -q             # 1161 passed, 11 skipped, 21 warnings in ~27s
+uv run pytest tests/ -x -q   # Fast failure mode
 ```
+
+Test breakdown: 51 tool tests, 24 task_workflow tests, 57 UI tests, 41+ API/engine/memory/compact/swarm/commands tests.
 
 ---
 
-## 🔧 Extending OpenHarness
+## 🔧 Extending DaoYi Agent OS
 
 ### Add a Custom Tool
 
 ```python
 from pydantic import BaseModel, Field
-from openharness.tools.base import BaseTool, ToolExecutionContext, ToolResult
+from daoyi.tools.base import BaseTool, ToolExecutionContext, ToolResult
 
 class MyToolInput(BaseModel):
     query: str = Field(description="Search query")
@@ -760,7 +653,7 @@ class MyTool(BaseTool):
 
 ### Add a Custom Skill
 
-Create `~/.openharness/skills/my-skill.md`:
+Create `~/.daoyi/skills/my-skill.md`:
 
 ```markdown
 ---
@@ -781,7 +674,7 @@ Use when the user asks about [your domain].
 
 ### Add a Plugin
 
-Create `.openharness/plugins/my-plugin/.claude-plugin/plugin.json`:
+Create `.daoyi/plugins/my-plugin/.claude-plugin/plugin.json`:
 
 ```json
 {
@@ -797,7 +690,7 @@ Add commands in `commands/*.md`, hooks in `hooks/hooks.json`, agents in `agents/
 
 ## 🌍 Showcase
 
-OpenHarness is most useful when treated as a small, inspectable harness you can adapt to a real workflow:
+DaoYi Agent OS is most useful when treated as a small, inspectable harness you can adapt to a real workflow:
 
 - **Repo coding assistant** for reading code, patching files, and running checks locally.
 - **Headless scripting tool** for `json` and `stream-json` output in automation flows.
@@ -811,7 +704,7 @@ See [`docs/SHOWCASE.md`](docs/SHOWCASE.md) for short, reproducible examples.
 
 ## 🤝 Contributing
 
-OpenHarness is a **community-driven research project**. We welcome contributions in:
+DaoYi Agent OS is a **community-driven research project**. We welcome contributions in:
 
 | Area | Examples |
 |------|---------|
@@ -825,8 +718,8 @@ OpenHarness is a **community-driven research project**. We welcome contributions
 
 ```bash
 # Development setup
-git clone https://github.com/HKUDS/OpenHarness.git
-cd OpenHarness
+git clone <repo-url>
+cd daoyi
 uv sync --extra dev
 uv run pytest -q  # Verify everything works
 ```
@@ -843,9 +736,7 @@ Useful contributor entry points:
 
 ### Backspace key in macOS Terminal.app
 
-OpenHarness handles both common terminal delete sequences, including the raw `DEL` byte (`0x7f`) that macOS Terminal.app sends for Backspace. If Backspace inserts spaces or visible control characters instead of deleting text, upgrade OpenHarness first.
-
-For older versions that do not include this fix, use a terminal that sends a standard Backspace sequence or adjust your terminal keyboard profile as a temporary workaround.
+DaoYi Agent OS handles both common terminal delete sequences, including the raw `DEL` byte (`0x7f`) that macOS Terminal.app sends for Backspace. If Backspace inserts spaces or visible control characters instead of deleting text, upgrade first.
 
 ---
 
@@ -856,24 +747,9 @@ MIT — see [LICENSE](LICENSE).
 ---
 
 <p align="center">
-  <img src="assets/logo.png" alt="OpenHarness" width="48">
+  <img src="assets/logo.png" alt="DaoYi Agent OS" width="48">
   <br>
-  <strong>Oh my Harness!</strong>
+  <strong>道易 — The path is simple.</strong>
   <br>
-  <em>The model is the agent. The code is the harness.</em>
-</p>
-
-<div align="center">
-  <a href="https://star-history.com/#HKUDS/OpenHarness&Date">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=HKUDS/OpenHarness&type=Date&theme=dark" />
-      <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=HKUDS/OpenHarness&type=Date" />
-      <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=HKUDS/OpenHarness&type=Date" style="border-radius: 15px; box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);" />
-    </picture>
-  </a>
-</div>
-
-<p align="center">
-  <em> Thanks for visiting ✨ OpenHarness!</em><br><br>
-  <img src="https://visitor-badge.laobi.icu/badge?page_id=HKUDS.OpenHarness&style=for-the-badge&color=00d4ff" alt="Views">
+  <em>Small model decides. Large model acts.</em>
 </p>

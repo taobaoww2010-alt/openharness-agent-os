@@ -3,19 +3,20 @@
 from __future__ import annotations
 
 import asyncio
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
 
-from openharness.api.client import ApiMessageCompleteEvent, ApiRetryEvent, ApiTextDeltaEvent
-from openharness.api.errors import RequestFailure
-from openharness.api.usage import UsageSnapshot
-from openharness.config.settings import PermissionSettings, Settings
-from openharness.engine.messages import ConversationMessage, TextBlock, ToolUseBlock
-from openharness.engine.query_engine import QueryEngine
-from openharness.prompts.context import build_runtime_system_prompt
-from openharness.engine.stream_events import (
+from daoyi.api.client import ApiMessageCompleteEvent, ApiRetryEvent, ApiTextDeltaEvent
+from daoyi.api.errors import RequestFailure
+from daoyi.api.usage import UsageSnapshot
+from daoyi.config.settings import PermissionSettings, Settings
+from daoyi.engine.messages import ConversationMessage, TextBlock, ToolUseBlock
+from daoyi.engine.query_engine import QueryEngine
+from daoyi.prompts.context import build_runtime_system_prompt
+from daoyi.engine.stream_events import (
     AssistantTextDelta,
     AssistantTurnComplete,
     CompactProgressEvent,
@@ -24,18 +25,18 @@ from openharness.engine.stream_events import (
     ToolExecutionCompleted,
     ToolExecutionStarted,
 )
-from openharness.permissions import PermissionChecker, PermissionMode
-from openharness.tasks import get_task_manager
-from openharness.tools import create_default_tool_registry
-from openharness.tools.base import BaseTool, ToolExecutionContext, ToolRegistry, ToolResult
-from openharness.tools.glob_tool import GlobTool
-from openharness.tools.grep_tool import GrepTool
+from daoyi.permissions import PermissionChecker, PermissionMode
+from daoyi.tasks import get_task_manager
+from daoyi.tools import create_default_tool_registry
+from daoyi.tools.base import BaseTool, ToolExecutionContext, ToolRegistry, ToolResult
+from daoyi.tools.glob_tool import GlobTool
+from daoyi.tools.grep_tool import GrepTool
 from pydantic import BaseModel
-from openharness.engine.messages import ToolResultBlock
-from openharness.hooks import HookExecutionContext, HookExecutor, HookEvent
-from openharness.hooks.loader import HookRegistry
-from openharness.hooks.schemas import PromptHookDefinition
-from openharness.engine.query import QueryContext, _execute_tool_call, _is_prompt_too_long_error
+from daoyi.engine.messages import ToolResultBlock
+from daoyi.hooks import HookExecutionContext, HookExecutor, HookEvent
+from daoyi.hooks.loader import HookRegistry
+from daoyi.hooks.schemas import PromptHookDefinition
+from daoyi.engine.query import QueryContext, _execute_tool_call, _is_prompt_too_long_error
 
 
 @dataclass
@@ -437,8 +438,8 @@ async def test_query_engine_surfaces_retry_status_events(tmp_path: Path):
 @pytest.mark.asyncio
 async def test_query_engine_emits_compact_progress_before_reply(tmp_path: Path, monkeypatch):
     long_text = "alpha " * 50000
-    monkeypatch.setattr("openharness.services.compact.try_session_memory_compaction", lambda *args, **kwargs: None)
-    monkeypatch.setattr("openharness.services.compact.should_autocompact", lambda *args, **kwargs: True)
+    monkeypatch.setattr("daoyi.services.compact.try_session_memory_compaction", lambda *args, **kwargs: None)
+    monkeypatch.setattr("daoyi.services.compact.should_autocompact", lambda *args, **kwargs: True)
     engine = QueryEngine(
         api_client=FakeApiClient(
             [
@@ -483,8 +484,8 @@ async def test_query_engine_emits_compact_progress_before_reply(tmp_path: Path, 
 
 @pytest.mark.asyncio
 async def test_query_engine_reactive_compacts_after_prompt_too_long(tmp_path: Path, monkeypatch):
-    monkeypatch.setattr("openharness.services.compact.try_session_memory_compaction", lambda *args, **kwargs: None)
-    monkeypatch.setattr("openharness.services.compact.should_autocompact", lambda *args, **kwargs: False)
+    monkeypatch.setattr("daoyi.services.compact.try_session_memory_compaction", lambda *args, **kwargs: None)
+    monkeypatch.setattr("daoyi.services.compact.should_autocompact", lambda *args, **kwargs: False)
     engine = QueryEngine(
         api_client=PromptTooLongThenSuccessApiClient(),
         tool_registry=create_default_tool_registry(),
@@ -701,7 +702,7 @@ class _RecordingHookExecutor:
         self.calls: list[tuple[HookEvent, dict]] = []
 
     async def execute(self, event: HookEvent, payload: dict):
-        from openharness.hooks.types import AggregatedHookResult
+        from daoyi.hooks.types import AggregatedHookResult
 
         self.calls.append((event, dict(payload)))
         return AggregatedHookResult(results=[])
@@ -878,7 +879,7 @@ async def test_subagent_stop_hook_fires_when_spawned_agent_finishes(tmp_path: Pa
                                     "prompt": "ready",
                                     "subagent_type": "worker",
                                     "mode": "local_agent",
-                                    "command": 'python -u -c "import sys; print(sys.stdin.readline().strip())"',
+                                    "command": f'{sys.executable} -u -c "import sys; print(sys.stdin.readline().strip())"',
                                 },
                             )
                         ],
@@ -1274,7 +1275,7 @@ async def test_query_engine_persists_compacted_tool_turn_history(tmp_path: Path,
     """Compaction must not make a completed tool turn disappear from engine history."""
 
     monkeypatch.delenv("CLAUDE_CODE_COORDINATOR_MODE", raising=False)
-    monkeypatch.setattr("openharness.services.compact.try_session_memory_compaction", lambda *args, **kwargs: None)
+    monkeypatch.setattr("daoyi.services.compact.try_session_memory_compaction", lambda *args, **kwargs: None)
     should_calls = {"count": 0}
 
     def _should_compact_once(*args, **kwargs):
@@ -1282,7 +1283,7 @@ async def test_query_engine_persists_compacted_tool_turn_history(tmp_path: Path,
         should_calls["count"] += 1
         return should_calls["count"] == 1
 
-    monkeypatch.setattr("openharness.services.compact.should_autocompact", _should_compact_once)
+    monkeypatch.setattr("daoyi.services.compact.should_autocompact", _should_compact_once)
 
     registry = ToolRegistry()
     registry.register(_OkTool())

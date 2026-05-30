@@ -9,14 +9,14 @@ from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
-from openharness.api.usage import UsageSnapshot
-from openharness.engine.messages import ConversationMessage, sanitize_conversation_messages
-from openharness.services.session_backend import SessionBackend
-from openharness.services.session_storage import (
+from daoyi.api.usage import UsageSnapshot
+from daoyi.engine.messages import ConversationMessage, sanitize_conversation_messages
+from daoyi.services.session_backend import SessionBackend
+from daoyi.services.session_storage import (
     _persistable_tool_metadata,
     _sanitize_snapshot_payload,
 )
-from openharness.utils.fs import atomic_write_text
+from daoyi.utils.fs import atomic_write_text
 
 from ohmo.workspace import get_sessions_dir
 

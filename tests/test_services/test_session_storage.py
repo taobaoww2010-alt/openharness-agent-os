@@ -5,9 +5,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from openharness.api.usage import UsageSnapshot
-from openharness.engine.messages import ConversationMessage, TextBlock
-from openharness.services.session_storage import (
+from daoyi.api.usage import UsageSnapshot
+from daoyi.engine.messages import ConversationMessage, TextBlock
+from daoyi.services.session_storage import (
     export_session_markdown,
     get_project_session_dir,
     load_session_snapshot,

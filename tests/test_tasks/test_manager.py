@@ -4,11 +4,12 @@ from __future__ import annotations
 
 import asyncio
 import json
+import sys
 from pathlib import Path
 
 import pytest
 
-from openharness.tasks.manager import BackgroundTaskManager, _encode_task_worker_payload
+from daoyi.tasks.manager import BackgroundTaskManager, _encode_task_worker_payload
 
 
 @pytest.mark.asyncio
@@ -55,7 +56,7 @@ async def test_create_agent_task_preserves_multiline_prompt(tmp_path: Path, monk
         description="agent",
         cwd=tmp_path,
         command=(
-            "python -u -c \"import sys, json; "
+            f"{sys.executable} -u -c \"import sys, json; "
             "print(json.loads(sys.stdin.readline())['text'].replace(chr(10), '|'))\""
         ),
     )

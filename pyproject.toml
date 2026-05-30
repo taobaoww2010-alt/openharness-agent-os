@@ -3,9 +3,9 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "openharness-ai"
+name = "daoyi-agent-os"
 version = "0.1.9"
-description = "Open-source Python port of Claude Code - an AI-powered CLI coding assistant"
+description = "DaoYi Agent OS — AI-powered coding assistant with skill-based orchestration"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
@@ -46,20 +46,19 @@ dev = [
 ]
 
 [project.scripts]
-openharness = "openharness.cli:app"
-oh = "openharness.cli:app"
-openh = "openharness.cli:app"
+daoyi = "daoyi.cli:app"
+dy = "daoyi.cli:app"
 ohmo = "ohmo.cli:app"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/openharness", "ohmo"]
+packages = ["src/daoyi", "ohmo"]
 
 [tool.hatch.build]
 exclude = [
     "/.git",
     "/.venv",
-    "/.openharness-venv",
-    "/.openharness",
+    "/.daoyi-venv",
+    "/.daoyi",
     "/.pytest_cache",
     "/.mypy_cache",
     "/.ruff_cache",
@@ -68,9 +67,9 @@ exclude = [
 ]
 
 [tool.hatch.build.targets.wheel.force-include]
-"frontend/terminal/package.json" = "openharness/_frontend/package.json"
-"frontend/terminal/tsconfig.json" = "openharness/_frontend/tsconfig.json"
-"frontend/terminal/src" = "openharness/_frontend/src"
+"frontend/terminal/package.json" = "daoyi/_frontend/package.json"
+"frontend/terminal/tsconfig.json" = "daoyi/_frontend/tsconfig.json"
+"frontend/terminal/src" = "daoyi/_frontend/src"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

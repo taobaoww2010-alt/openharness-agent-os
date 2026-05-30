@@ -7,13 +7,13 @@ from pathlib import Path
 
 import pytest
 
-from openharness.commands.registry import CommandContext, create_default_command_registry
-from openharness.config.settings import load_settings
-from openharness.engine.messages import ConversationMessage, TextBlock
-from openharness.engine.query_engine import QueryEngine
-from openharness.permissions import PermissionChecker
-from openharness.state import AppState, AppStateStore
-from openharness.tools import create_default_tool_registry
+from daoyi.commands.registry import CommandContext, create_default_command_registry
+from daoyi.config.settings import load_settings
+from daoyi.engine.messages import ConversationMessage, TextBlock
+from daoyi.engine.query_engine import QueryEngine
+from daoyi.permissions import PermissionChecker
+from daoyi.state import AppState, AppStateStore
+from daoyi.tools import create_default_tool_registry
 
 
 class FakeApiClient:

@@ -5,17 +5,17 @@ import os
 import time
 from pathlib import Path
 
-from openharness.config.settings import Settings
-from openharness.services.autodream.backup import create_memory_backup, diff_memory_dirs, restore_memory_backup
-from openharness.services.autodream.lock import (
+from daoyi.config.settings import Settings
+from daoyi.services.autodream.backup import create_memory_backup, diff_memory_dirs, restore_memory_backup
+from daoyi.services.autodream.lock import (
     list_sessions_touched_since,
     read_last_consolidated_at,
     rollback_consolidation_lock,
     try_acquire_consolidation_lock,
 )
-from openharness.services.autodream.prompt import build_consolidation_prompt
-from openharness.services.autodream.service import execute_auto_dream, start_dream_now
-from openharness.services.session_storage import get_project_session_dir
+from daoyi.services.autodream.prompt import build_consolidation_prompt
+from daoyi.services.autodream.service import execute_auto_dream, start_dream_now
+from daoyi.services.session_storage import get_project_session_dir
 
 
 def test_consolidation_lock_acquire_and_rollback(tmp_path: Path, monkeypatch) -> None:
@@ -156,7 +156,7 @@ async def test_start_dream_now_uses_overrides(tmp_path: Path, monkeypatch) -> No
             return None
 
         async def create_shell_task(self, **kwargs):
-            from openharness.tasks.types import TaskRecord
+            from daoyi.tasks.types import TaskRecord
 
             captured.update(kwargs)
             return TaskRecord(
@@ -170,7 +170,7 @@ async def test_start_dream_now_uses_overrides(tmp_path: Path, monkeypatch) -> No
                 env=kwargs["env"],
             )
 
-    monkeypatch.setattr("openharness.services.autodream.service.get_task_manager", lambda: _Manager())
+    monkeypatch.setattr("daoyi.services.autodream.service.get_task_manager", lambda: _Manager())
     settings = Settings()
     task = await start_dream_now(
         cwd=cwd,

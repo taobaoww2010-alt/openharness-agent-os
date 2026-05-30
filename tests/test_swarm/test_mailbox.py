@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from openharness.swarm.mailbox import (
+from daoyi.swarm.mailbox import (
     MailboxMessage,
     TeammateMailbox,
     create_idle_notification,

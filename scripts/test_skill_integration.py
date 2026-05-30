@@ -16,7 +16,7 @@ async def test_skill_in_workflow():
 
     try:
         # 1. Check SKILL context injector
-        from openharness.task_workflow.skill_context_injector import get_skill_context_injector
+        from daoyi.task_workflow.skill_context_injector import get_skill_context_injector
         injector = get_skill_context_injector()
         skill_msg = injector.build_skill_context_message("edit image with gimp", limit=3)
         print(f"\n1. ✅ SKILL context built")
@@ -30,7 +30,7 @@ async def test_skill_in_workflow():
         print(f"   Commands: {len(schema['parameters']['properties']['command']['enum'])}")
 
         # 3. Check WorkflowExecutor code modification
-        with open("src/openharness/task_workflow/executor.py", "r") as f:
+        with open("src/daoyi/task_workflow/executor.py", "r") as f:
             executor_code = f.read()
 
         has_skill_injection = "SKILL context injection" in executor_code
@@ -61,8 +61,8 @@ async def test_skill_executor_tool():
     print("=" * 60)
 
     try:
-        from openharness.tools.skill_executor_tool import SkillExecutorTool, SkillExecutorInput
-        from openharness.tools.base import ToolExecutionContext
+        from daoyi.tools.skill_executor_tool import SkillExecutorTool, SkillExecutorInput
+        from daoyi.tools.base import ToolExecutionContext
 
         tool = SkillExecutorTool()
         print(f"\n1. ✅ Tool loaded: {tool.name}")

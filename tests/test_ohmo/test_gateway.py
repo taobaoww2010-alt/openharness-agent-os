@@ -9,30 +9,30 @@ from pathlib import Path
 
 import pytest
 
-from openharness.api.client import ApiMessageCompleteEvent
-from openharness.api.usage import UsageSnapshot
-from openharness.autopilot.service import RepoAutopilotStore
-from openharness.bridge import get_bridge_manager
-from openharness.channels.bus.events import InboundMessage
-from openharness.channels.bus.queue import MessageBus
-from openharness.commands import CommandResult
-from openharness.commands.registry import SlashCommand, create_default_command_registry
-from openharness.config.paths import get_project_issue_file, get_project_pr_comments_file
-from openharness.config.settings import PermissionSettings, ProviderProfile, Settings
-from openharness.engine.messages import ConversationMessage, ImageBlock, TextBlock, ToolUseBlock
-from openharness.engine.query_engine import QueryEngine
-from openharness.engine.stream_events import (
+from daoyi.api.client import ApiMessageCompleteEvent
+from daoyi.api.usage import UsageSnapshot
+from daoyi.autopilot.service import RepoAutopilotStore
+from daoyi.bridge import get_bridge_manager
+from daoyi.channels.bus.events import InboundMessage
+from daoyi.channels.bus.queue import MessageBus
+from daoyi.commands import CommandResult
+from daoyi.commands.registry import SlashCommand, create_default_command_registry
+from daoyi.config.paths import get_project_issue_file, get_project_pr_comments_file
+from daoyi.config.settings import PermissionSettings, ProviderProfile, Settings
+from daoyi.engine.messages import ConversationMessage, ImageBlock, TextBlock, ToolUseBlock
+from daoyi.engine.query_engine import QueryEngine
+from daoyi.engine.stream_events import (
     AssistantTextDelta,
     CompactProgressEvent,
     ErrorEvent,
     ToolExecutionCompleted,
     ToolExecutionStarted,
 )
-from openharness.memory import add_memory_entry as add_project_memory_entry
-from openharness.memory import list_memory_files as list_project_memory_files
-from openharness.permissions import PermissionChecker, PermissionMode
-from openharness.tasks.manager import get_task_manager
-from openharness.tools.base import ToolExecutionContext, ToolRegistry
+from daoyi.memory import add_memory_entry as add_project_memory_entry
+from daoyi.memory import list_memory_files as list_project_memory_files
+from daoyi.permissions import PermissionChecker, PermissionMode
+from daoyi.tasks.manager import get_task_manager
+from daoyi.tools.base import ToolExecutionContext, ToolRegistry
 
 from ohmo.gateway.bridge import OhmoGatewayBridge, _format_gateway_error
 from ohmo.gateway.config import load_gateway_config, save_gateway_config
@@ -158,8 +158,8 @@ async def test_slack_thread_messages_use_sender_scoped_router_keys(monkeypatch):
     install_stub("slack_sdk.web")
     install_stub("slack_sdk.web.async_client", AsyncWebClient=object)
 
-    from openharness.channels.impl.slack import SlackChannel
-    from openharness.config.schema import SlackConfig
+    from daoyi.channels.impl.slack import SlackChannel
+    from daoyi.config.schema import SlackConfig
 
     class CapturingBus:
         def __init__(self):
@@ -1079,7 +1079,7 @@ async def test_runtime_pool_blocks_registered_commit_without_running_git_hooks(t
     repo.mkdir()
     subprocess.run(["git", "init"], cwd=repo, check=True, capture_output=True, text=True)
     subprocess.run(
-        ["git", "config", "user.email", "openharness-test@example.invalid"],
+        ["git", "config", "user.email", "daoyi-test@example.invalid"],
         cwd=repo,
         check=True,
         capture_output=True,

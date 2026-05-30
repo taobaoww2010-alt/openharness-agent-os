@@ -8,10 +8,10 @@ from types import SimpleNamespace
 
 import pytest
 
-from openharness.channels.bus.queue import MessageBus
-from openharness.channels.bus.events import OutboundMessage
-from openharness.channels.impl.feishu import FeishuChannel, _extract_feishu_mentions, _feishu_mentions_bot
-from openharness.config.schema import FeishuConfig
+from daoyi.channels.bus.queue import MessageBus
+from daoyi.channels.bus.events import OutboundMessage
+from daoyi.channels.impl.feishu import FeishuChannel, _extract_feishu_mentions, _feishu_mentions_bot
+from daoyi.config.schema import FeishuConfig
 from ohmo.group_registry import save_managed_group_record
 
 

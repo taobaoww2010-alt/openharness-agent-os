@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from openharness.ui.runtime import build_runtime, close_runtime, handle_line
+from daoyi.ui.runtime import build_runtime, close_runtime, handle_line
 
 
 class _StaticApiClient:

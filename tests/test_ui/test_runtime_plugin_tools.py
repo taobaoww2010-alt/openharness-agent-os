@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from openharness.ui.runtime import build_runtime, close_runtime
+from daoyi.ui.runtime import build_runtime, close_runtime
 
 
 class _StaticApiClient:
@@ -32,7 +32,7 @@ def _write_tool_plugin(plugins_root: Path) -> None:
     )
     (tools_dir / "echo_tool.py").write_text(
         "from pydantic import BaseModel\n"
-        "from openharness.tools.base import BaseTool, ToolExecutionContext, ToolResult\n\n"
+        "from daoyi.tools.base import BaseTool, ToolExecutionContext, ToolResult\n\n"
         "class EchoArgs(BaseModel):\n"
         "    text: str = 'hello'\n\n"
         "class EchoTool(BaseTool):\n"
@@ -50,13 +50,13 @@ def _write_tool_plugin(plugins_root: Path) -> None:
 async def test_build_runtime_registers_enabled_plugin_tools(tmp_path: Path, monkeypatch):
     monkeypatch.setenv("OPENHARNESS_CONFIG_DIR", str(tmp_path / "config"))
     project = tmp_path / "repo"
-    plugins_root = project / ".openharness" / "plugins"
+    plugins_root = project / ".daoyi" / "plugins"
     plugins_root.mkdir(parents=True)
     _write_tool_plugin(plugins_root)
 
-    from openharness.config.settings import Settings
+    from daoyi.config.settings import Settings
 
-    monkeypatch.setattr("openharness.ui.runtime.load_settings", lambda: Settings(allow_project_plugins=True))
+    monkeypatch.setattr("daoyi.ui.runtime.load_settings", lambda: Settings(allow_project_plugins=True))
 
     bundle = await build_runtime(cwd=str(project), api_client=_StaticApiClient())
     try:

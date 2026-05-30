@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from openharness.auth.manager import AuthManager
-from openharness.config import load_settings
+from daoyi.auth.manager import AuthManager
+from daoyi.config import load_settings
 
 from ohmo.gateway.config import load_gateway_config, save_gateway_config
 

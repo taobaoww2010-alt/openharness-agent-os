@@ -7,14 +7,14 @@ from pathlib import Path
 
 import pytest
 
-from openharness.coordinator.coordinator_mode import get_team_registry
-from openharness.tasks import get_task_manager
-from openharness.tools.agent_tool import AgentTool, AgentToolInput
-from openharness.tools.base import ToolExecutionContext
-from openharness.tools.task_create_tool import TaskCreateTool, TaskCreateToolInput
-from openharness.tools.task_output_tool import TaskOutputTool, TaskOutputToolInput
-from openharness.tools.task_update_tool import TaskUpdateTool, TaskUpdateToolInput
-from openharness.tools.team_create_tool import TeamCreateTool, TeamCreateToolInput
+from daoyi.coordinator.coordinator_mode import get_team_registry
+from daoyi.tasks import get_task_manager
+from daoyi.tools.agent_tool import AgentTool, AgentToolInput
+from daoyi.tools.base import ToolExecutionContext
+from daoyi.tools.task_create_tool import TaskCreateTool, TaskCreateToolInput
+from daoyi.tools.task_output_tool import TaskOutputTool, TaskOutputToolInput
+from daoyi.tools.task_update_tool import TaskUpdateTool, TaskUpdateToolInput
+from daoyi.tools.team_create_tool import TeamCreateTool, TeamCreateToolInput
 
 
 async def _wait_for_terminal_task(task_id: str, *, timeout_seconds: float = 2.0) -> None:
@@ -172,15 +172,15 @@ async def test_send_message_swarm_path_uses_subprocess_backend(
     monkeypatch.setenv("OPENHARNESS_DATA_DIR", str(tmp_path / "data"))
     context = ToolExecutionContext(cwd=tmp_path)
 
-    from openharness.tools.send_message_tool import SendMessageTool
+    from daoyi.tools.send_message_tool import SendMessageTool
 
     with patch(
-        "openharness.swarm.subprocess_backend.SubprocessBackend.send_message",
+        "daoyi.swarm.subprocess_backend.SubprocessBackend.send_message",
         new_callable=AsyncMock,
     ) as mock_send:
         await SendMessageTool().execute(
             __import__(
-                "openharness.tools.send_message_tool",
+                "daoyi.tools.send_message_tool",
                 fromlist=["SendMessageToolInput"],
             ).SendMessageToolInput(
                 task_id="worker@default",

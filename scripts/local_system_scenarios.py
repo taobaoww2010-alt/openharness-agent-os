@@ -12,21 +12,21 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from openharness.commands.registry import CommandContext, create_default_command_registry
-from openharness.config.settings import Settings, load_settings
-from openharness.engine.messages import ConversationMessage, TextBlock
-from openharness.engine.query_engine import QueryEngine
-from openharness.mcp.client import McpClientManager
-from openharness.mcp.config import load_mcp_server_configs
-from openharness.mcp.types import McpStdioServerConfig
-from openharness.permissions import PermissionChecker
-from openharness.plugins import load_plugins
-from openharness.plugins.installer import install_plugin_from_path, uninstall_plugin
-from openharness.state import AppState, AppStateStore
-from openharness.bridge import build_sdk_url, decode_work_secret, encode_work_secret, spawn_session
-from openharness.bridge.types import WorkSecret
-from openharness.tools import create_default_tool_registry
-from openharness.tools.base import ToolExecutionContext
+from daoyi.commands.registry import CommandContext, create_default_command_registry
+from daoyi.config.settings import Settings, load_settings
+from daoyi.engine.messages import ConversationMessage, TextBlock
+from daoyi.engine.query_engine import QueryEngine
+from daoyi.mcp.client import McpClientManager
+from daoyi.mcp.config import load_mcp_server_configs
+from daoyi.mcp.types import McpStdioServerConfig
+from daoyi.permissions import PermissionChecker
+from daoyi.plugins import load_plugins
+from daoyi.plugins.installer import install_plugin_from_path, uninstall_plugin
+from daoyi.state import AppState, AppStateStore
+from daoyi.bridge import build_sdk_url, decode_work_secret, encode_work_secret, spawn_session
+from daoyi.bridge.types import WorkSecret
+from daoyi.tools import create_default_tool_registry
+from daoyi.tools.base import ToolExecutionContext
 
 
 FIXTURE_SERVER = Path(__file__).resolve().parents[1] / "tests" / "fixtures" / "fake_mcp_server.py"
@@ -220,7 +220,7 @@ async def _run_command_flow(temp_root: Path) -> None:
 
 
 async def main() -> int:
-    with tempfile.TemporaryDirectory(prefix="openharness-local-system-") as temp_dir:
+    with tempfile.TemporaryDirectory(prefix="daoyi-local-system-") as temp_dir:
         temp_root = Path(temp_dir)
         previous = {
             "OPENHARNESS_CONFIG_DIR": os.environ.get("OPENHARNESS_CONFIG_DIR"),

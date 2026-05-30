@@ -81,3 +81,34 @@ jobs:
 
       - name: TypeScript check
         run: npx tsc --noEmit
+
+  cpp-tests:
+    name: C++ tests (macOS)
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: cpp-core
+    steps:
+      - name: Checkout with submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Install dependencies
+        run: |
+          brew install cmake ninja googletest
+
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+            -GNinja \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DOH_BUILD_PYTHON_BINDINGS=OFF \
+            -DOH_ENABLE_GPU=OFF \
+            -DOH_ENABLE_REMOTE_INFERENCE=OFF
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure

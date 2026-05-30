@@ -9,8 +9,8 @@ from pathlib import Path
 
 import typer
 
-from openharness.auth.manager import AuthManager
-from openharness.config import load_settings
+from daoyi.auth.manager import AuthManager
+from daoyi.config import load_settings
 
 from ohmo.gateway.config import load_gateway_config, save_gateway_config
 from ohmo.gateway.models import GatewayConfig

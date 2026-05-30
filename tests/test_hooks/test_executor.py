@@ -6,13 +6,13 @@ from pathlib import Path
 
 import pytest
 
-from openharness.api.client import ApiMessageCompleteEvent
-from openharness.api.usage import UsageSnapshot
-from openharness.engine.messages import ConversationMessage, TextBlock
-from openharness.hooks import HookEvent, HookExecutionContext, HookExecutor
-from openharness.hooks.executor import _inject_arguments
-from openharness.hooks.loader import HookRegistry
-from openharness.hooks.schemas import CommandHookDefinition, PromptHookDefinition
+from daoyi.api.client import ApiMessageCompleteEvent
+from daoyi.api.usage import UsageSnapshot
+from daoyi.engine.messages import ConversationMessage, TextBlock
+from daoyi.hooks import HookEvent, HookExecutionContext, HookExecutor
+from daoyi.hooks.executor import _inject_arguments
+from daoyi.hooks.loader import HookRegistry
+from daoyi.hooks.schemas import CommandHookDefinition, PromptHookDefinition
 
 
 class FakeApiClient:

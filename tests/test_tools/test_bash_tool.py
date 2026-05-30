@@ -3,9 +3,9 @@ from pathlib import Path
 
 import pytest
 
-from openharness.tools.base import ToolExecutionContext
-from openharness.tools.bash_tool import BashTool, BashToolInput
-import openharness.tools.bash_tool as bash_tool_module
+from daoyi.tools.base import ToolExecutionContext
+from daoyi.tools.bash_tool import BashTool, BashToolInput
+import daoyi.tools.bash_tool as bash_tool_module
 
 
 class _FakeStdout:
@@ -120,10 +120,11 @@ async def test_bash_tool_preflights_interactive_scaffold_commands(tmp_path: Path
 
 @pytest.mark.asyncio
 async def test_bash_tool_timeout_returns_partial_output_for_real_command(tmp_path: Path):
+    import sys
     result = await BashTool().execute(
         BashToolInput(
             command=(
-                "python -u -c \"print('Creating a new Next.js app in /tmp/coolblog.'); "
+                f"{sys.executable} -u -c \"print('Creating a new Next.js app in /tmp/coolblog.'); "
                 "print('Would you like to use Turbopack?'); "
                 "import time; time.sleep(5)\""
             ),
@@ -195,7 +196,7 @@ async def test_bash_tool_timeout_does_not_hang_when_stdout_stays_open(monkeypatc
     async def fake_create_shell_subprocess(*args, **kwargs):
         return process
 
-    monkeypatch.setattr("openharness.tools.bash_tool.create_shell_subprocess", fake_create_shell_subprocess)
+    monkeypatch.setattr("daoyi.tools.bash_tool.create_shell_subprocess", fake_create_shell_subprocess)
     monkeypatch.setattr(
         bash_tool_module,
         "_READ_REMAINING_OUTPUT_TIMEOUT_SECONDS",

@@ -35,3 +35,14 @@ react_tui_smoke.txt
 .DS_Store
 Thumbs.db
 uv.lock
+
+# Build artifacts (alternative dirs)
+build2/
+build3/
+
+# ML model files (large binary)
+models/*.gguf
+
+# Embedded submodule (tracked separately)
+cpp-core/
+cpp-core

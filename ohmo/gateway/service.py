@@ -16,9 +16,9 @@ from pathlib import Path
 if sys.platform == "win32":
     import ctypes
 
-from openharness.channels.bus.events import OutboundMessage
-from openharness.channels.bus.queue import MessageBus
-from openharness.channels.impl.manager import ChannelManager
+from daoyi.channels.bus.events import OutboundMessage
+from daoyi.channels.bus.queue import MessageBus
+from daoyi.channels.impl.manager import ChannelManager
 
 from ohmo.gateway.bridge import OhmoGatewayBridge
 from ohmo.gateway.config import build_channel_manager_config, load_gateway_config

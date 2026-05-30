@@ -9,9 +9,9 @@ from typing import Any
 
 import pytest
 
-from openharness.config.settings import ImageGenerationConfig
-from openharness.tools.base import ToolExecutionContext
-from openharness.tools.image_generation_tool import ImageGenerationTool, ImageGenerationToolInput
+from daoyi.config.settings import ImageGenerationConfig
+from daoyi.tools.base import ToolExecutionContext
+from daoyi.tools.image_generation_tool import ImageGenerationTool, ImageGenerationToolInput
 
 
 class _FakeStreamResponse:
@@ -118,7 +118,7 @@ async def test_execute_codex_hosted_generation(monkeypatch: pytest.MonkeyPatch, 
         ]
     )
     monkeypatch.setattr(
-        "openharness.tools.image_generation_tool.httpx.AsyncClient",
+        "daoyi.tools.image_generation_tool.httpx.AsyncClient",
         lambda *args, **kwargs: _FakeAsyncClient(response, sink),
     )
 

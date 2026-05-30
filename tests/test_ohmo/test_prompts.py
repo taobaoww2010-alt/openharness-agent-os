@@ -1,8 +1,8 @@
 from pathlib import Path
 
-from openharness.config.settings import Settings
-from openharness.memory import add_memory_entry as add_project_memory_entry
-from openharness.prompts import build_runtime_system_prompt
+from daoyi.config.settings import Settings
+from daoyi.memory import add_memory_entry as add_project_memory_entry
+from daoyi.prompts import build_runtime_system_prompt
 
 from ohmo.memory import add_memory_entry as add_ohmo_memory_entry
 from ohmo.memory import list_memory_files as list_ohmo_memory_files

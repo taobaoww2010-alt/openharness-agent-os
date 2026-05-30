@@ -2,9 +2,9 @@ import asyncio
 import json
 from pathlib import Path
 
-from openharness.config.settings import load_settings
-from openharness.plugins import load_plugins
-from openharness.skills import load_skill_registry
+from daoyi.config.settings import load_settings
+from daoyi.plugins import load_plugins
+from daoyi.skills import load_skill_registry
 
 from ohmo.runtime import run_ohmo_backend
 from ohmo.workspace import get_plugins_dir, get_skills_dir, initialize_workspace
@@ -63,7 +63,7 @@ def _write_plugin_with_skill_dir(root: Path, name: str, skill_dir_name: str) -> 
 
 
 def test_ohmo_loaders_merge_shared_and_private_skills_and_plugins(tmp_path, monkeypatch):
-    config_dir = tmp_path / ".openharness"
+    config_dir = tmp_path / ".daoyi"
     monkeypatch.setenv("OPENHARNESS_CONFIG_DIR", str(config_dir))
     workspace = tmp_path / ".ohmo-home"
     initialize_workspace(workspace)
@@ -102,7 +102,7 @@ def test_ohmo_loaders_merge_shared_and_private_skills_and_plugins(tmp_path, monk
 
 
 def test_ohmo_private_skill_directory_with_skill_md_is_loaded(tmp_path, monkeypatch):
-    config_dir = tmp_path / ".openharness"
+    config_dir = tmp_path / ".daoyi"
     monkeypatch.setenv("OPENHARNESS_CONFIG_DIR", str(config_dir))
     workspace = tmp_path / ".ohmo-home"
     initialize_workspace(workspace)
@@ -147,7 +147,7 @@ def test_run_ohmo_backend_passes_private_skill_and_plugin_roots(tmp_path, monkey
 
 
 def test_plugin_loader_supports_directory_skill_layout(tmp_path, monkeypatch):
-    config_dir = tmp_path / ".openharness"
+    config_dir = tmp_path / ".daoyi"
     monkeypatch.setenv("OPENHARNESS_CONFIG_DIR", str(config_dir))
     workspace = tmp_path / ".ohmo-home"
     initialize_workspace(workspace)
